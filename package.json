@@ -1,0 +1,39 @@
+{
+  "name": "eald",
+  "version": "1.0.0",
+  "description": "Early Arrival / Late Departure",
+  "scripts": {
+    "build": "./node_modules/.bin/babel src -d dist",
+    "gas": "./node_modules/.bin/gas",
+    "lint": "./node_modules/.bin/eslint src",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yarunluon/eald.git"
+  },
+  "keywords": [
+    "gas",
+    "fnf",
+    "eald"
+  ],
+  "author": "Yarun Luon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yarunluon/eald/issues"
+  },
+  "homepage": "https://github.com/yarunluon/eald#readme",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.4.0",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.10.3",
+    "google-apps-script": "^1.1.2"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
+}
