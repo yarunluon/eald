@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "Early Arrival / Late Departure",
   "scripts": {
-    "build": "./node_modules/.bin/babel src -d dist",
-    "gas": "./node_modules/.bin/gas",
+    "build": "./node_modules/.bin/webpack --config webpack.config.js",
+    "clean": "rm -rf dist/",
+    "copy": "./scripts/copy.sh",
+    "deploy": "npm run build && npm run copy",
     "lint": "./node_modules/.bin/eslint src",
+    "reinstall": "npm run clean && rm -rf node_modules && npm install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -13,7 +16,6 @@
     "url": "git+https://github.com/yarunluon/eald.git"
   },
   "keywords": [
-    "gas",
     "fnf",
     "eald"
   ],
@@ -24,14 +26,17 @@
   },
   "homepage": "https://github.com/yarunluon/eald#readme",
   "devDependencies": {
-    "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
     "babel-preset-env": "^1.4.0",
+    "copy-webpack-plugin": "^4.0.1",
+    "dotenv-webpack": "^1.4.3",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
-    "google-apps-script": "^1.1.2"
+    "webpack": "^2.4.1"
   },
   "dependencies": {
     "lodash": "^4.17.4"
