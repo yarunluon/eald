@@ -5,5 +5,8 @@ module.exports = {
     FormApp: false,
     Logger: false,
     SpreadsheetApp: false,
-  }
+  },
+  rules: {
+    'import/prefer-default-export': 'off',
+  },
 }
