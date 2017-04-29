@@ -28,7 +28,7 @@ module.exports = {
   plugins: [
     new Dotenv({
       path: './.env',
-      safe: true,
+      safe: false,
     }),
     new CopyWebpackPlugin([
       { from: 'vendor' },
