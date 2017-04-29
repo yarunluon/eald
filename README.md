@@ -12,10 +12,6 @@ Form sections
 - Any comments for this role
 
 ## TODOs
-1. gas
-1. dotenv
-1. Babel
-1. Eslint
 1. Testing
 1. Write the code
 1. Add utility libraries
