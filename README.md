@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/yarunluon/eald.svg?branch=master)](https://travis-ci.org/yarunluon/eald)
+
 # Early Arrival / Late Departure
 Manages the early arrival and late departure of guests. Scripts run in Google App Scripts.
 
