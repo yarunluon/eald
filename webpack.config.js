@@ -4,7 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
-    'create-form': './src/create-form.js',
+    'create-form': ['./src/create-form.js'],
   },
   output: {
     libraryTarget: 'this',

@@ -1,156 +1,129 @@
-function getWristbandSubmissionForm() {
-  const ID = process.env.FORM_ID;
-  const form = FormApp.openById(ID);
-  // Logger.log(form.getTitle());
-  return form;
+/**
+* Gets the form to submit ea/ld names
+* @returns {Form} Google Form
+**/
+function getForm() {
+  return FormApp.openById(process.env.FORM_ID);
 }
 
-function getWristbandSpreadsheet() {
-  // Public facing
-  const ID = process.env.WRISTBAND_SHEET_ID;
-
-  const spreadsheet = SpreadsheetApp.openById(ID);
-  // Logger.log(spreadsheet.getName());
-  return spreadsheet;
+/**
+* Gets the public facing spreadsheet
+* @returns {Spreadsheet} Google Spreadsheet
+**/
+function getPublicSheet() {
+  return SpreadsheetApp.openById(process.env.PUBLIC_SHEET_ID);
 }
 
-function getWristbandsByCommitteeSheet() {
-  // var ID = 1.451333585E9;
+/**
+* Gets the sheet containing the wristbands by role
+* @returns {Sheet} Google sheet summarizing the wristbands by role
+**/
+function getWristbandsByRole() {
   const id = 0.0;
-  const spreadsheet = getWristbandSpreadsheet();
-  const wristbandSheet = _.filter(spreadsheet.getSheets(), sheet => sheet.getSheetId() === id)[0];
-  // Logger.log(sheet);
-  return wristbandSheet;
+  const spreadsheet = getPublicSheet();
+  return _.filter(spreadsheet.getSheets(), sheet => sheet.getSheetId() === id)[0];
 }
 
+/**
+* Removes all items in the form
+* @param {Form} - Google Form
+* @returns {Form} - The same form, but with all items removed
+**/
 function clearForm(form) {
-  const items = form.getItems();
-  items.forEach((item) => {
+  form.getItems().forEach((item) => {
     try {
       form.deleteItem(item);
     } catch (error) {
       Logger.log('%s Item already deleted', item.getTitle());
     }
   });
+
   return form;
 }
 
+/**
+* Gets a record from the sheet
+* @param {Sheet} Google Sheet
+* @param {Number} The row index within the sheet to return
+* @param {Number} The last column to return in the row
+* @returns {Array} The record from the sheet
+**/
 function getRecordValues(sheet, row, lastColumn) {
   const FIRST_COLUMN = 1;
   const NUM_ROWS = 1;
   return sheet.getRange(row, FIRST_COLUMN, NUM_ROWS, lastColumn).getValues()[0];
 }
 
-function getCoordinatorEmails(record, numColumns) {
-//  var NUM_ROWS = 1;
-//  var ROW = 1;
-//  var ZERO_BASED_ROW = 0;
-  const ZERO_BASED_COLUMN = 6;
-//  var row = record.getValues()[ZERO_BASED_ROW];
-  const emails = _.compact(record.slice(ZERO_BASED_COLUMN, numColumns));
-  // Logger.log(emails);
-  return emails;
-}
-
-function getSimplifiedForm(form, sheet) {
+/**
+* (Re-)Create a stateless form
+* @param {Form} form         - Google Form
+* @param {Spreedsheet} sheet - Spreadsheet about wristbands
+* @returns {Form} The same form with the form items added
+**/
+export function createStatelessForm(form, sheet) {
   const range = sheet.getDataRange();
   const numColumns = range.getNumColumns();
   const numRows = range.getNumRows();
   const DATA_FIRST_ROW = 3;
 
-  form.setTitle('FnF XX - EA/LD volunteer signup');
+  form.setTitle('FnF XXI - EA/LD volunteer signup');
   form.setShowLinkToRespondAgain(true);
   form.setShuffleQuestions(false);
   form.setPublishingSummary(false);
   form.setProgressBar(false);
   form.setAllowResponseEdits(false);
 
-  form.addPageBreakItem().setTitle("Let's begin");
+  const selectRoleListItem = form
+    .addListItem()
+    .setRequired(true);
+
+  const allRoles = _.times((numRows + 1) - DATA_FIRST_ROW, (num) => {
+    const index = num + DATA_FIRST_ROW;
+    const [,, role] = getRecordValues(sheet, index, numColumns);
+    return role;
+  }).concat('FnF').sort();
+
+  const roleChoices = _.map(allRoles, role => selectRoleListItem.createChoice(role));
+
+  selectRoleListItem
+    .setTitle('Role')
+    .setChoices(roleChoices);
+
+  form.addParagraphTextItem()
+    .setTitle('Early arrival names')
+    .setHelpText('Separate all names with a comma.');
+
+  form.addParagraphTextItem()
+    .setTitle('Late departure names')
+    .setHelpText('Separate all names with a comma. Repeat the name if they are picking up more than one.');
+
+  form.addPageBreakItem().setTitle('Contact information');
 
   form.addTextItem()
     .setTitle('Who are you?')
-    .setHelpText("Not everyone has a Google account so we can't ask Big Brother to tell us who you are.")
-    .setRequired(true);
+    .setRequired(false);
 
   form.addTextItem()
     .setTitle('What is your email?')
-    .setHelpText('A sparkle pony will send you a lovely confirmation email.')
-    .setRequired(true);
+    .setRequired(false);
 
   form.addPageBreakItem()
-    .setTitle('Select which role');
-  const committeeQuestion = form
-    .addListItem()
-    .setRequired(true);
-  const committeePageNavigationMap = {};
-
-  const lastPage = form.addPageBreakItem()
     .setTitle('Almost done. Hit the button below.');
 
-  const maxRows = numRows + 1;
-  _.forEach(_.range(DATA_FIRST_ROW, maxRows), (number) => {
-    const recordValues = getRecordValues(sheet, number, numColumns);
-    const [, committee, , earlySlots, lateSlots] = recordValues;
-    const emails = getCoordinatorEmails(recordValues, numColumns);
-    Logger.log('%s %s %s %s %s', number, committee, earlySlots, lateSlots, emails);
-    const earlyPassStr = earlySlots === 1 ? 'pass' : 'passes';
-    const latePassStr = lateSlots === 1 ? 'pass' : 'passes';
-
-    const earlyHelptext = `This role has ${earlySlots} early ${earlyPassStr}`;
-
-    const emailConfirmationText = `${emails.length === 1 ? 'An email' : 'Emails'} will be sent to: ${emails.join(', ')}`;
-
-    const instructionsText = 'Example: Paul Oakenfold, Doc Martin, Carl Cox';
-    const slotsHelpText = `This role has ${earlySlots} early ${earlyPassStr} and ${lateSlots} late ${latePassStr}`;
-
-    const nextSectionText = 'You will submit this information in the next section.';
-    const committeeHelpText = `${emailConfirmationText}\n\n${slotsHelpText}\n\n${nextSectionText}`;
-
-    const committeePageBreak = form.addPageBreakItem()
-      .setTitle(committee)
-      .setHelpText(committeeHelpText);
-
-    committeePageBreak.setGoToPage(lastPage);
-    committeePageNavigationMap[committee] = committeePageBreak;
-
-    if (earlySlots) {
-      form.addPageBreakItem();
-      form.addSectionHeaderItem().setTitle('Early arrivals').setHelpText(earlyHelptext);
-      form.addParagraphTextItem().setTitle('Full names').setHelpText(instructionsText);
-    }
-
-    if (lateSlots) {
-      if (earlySlots) {
-        form.addPageBreakItem();
-          // .setTitle(committee);
-          // .setHelpText(committeeHelpText);
-      }
-      form.addSectionHeaderItem().setTitle('Late Departures').setHelpText('If you have volunteers, please have them pick up the wristbands from you. Otherwise, enter all names that can pick up wristbands.');
-      form.addTextItem().setTitle('Full names').setHelpText('Any remaining passes will be given to the first person in the list.');
-    }
-  });
-
-  const committeeChoices = _.map(
-    committeePageNavigationMap,
-    (pageBreakItem, committee) => committeeQuestion.createChoice(committee, pageBreakItem),
-  );
-
-  committeeQuestion
-    .setTitle('Role')
-    .setChoices(committeeChoices);
-
-  form.moveItem(lastPage.getIndex(), form.getItems().length - 1);
-
   form.setConfirmationMessage(
-    'Done. Thank you. A team of sparkle ponies are typing up the confirmation emails.\n\n' +
+    'Done.\n\n' +
     'Made a mistake? Submit a new response.\n\n' +
-    "Something didn't go as planned? Email yarunl@gmail.com",
+    "Something didn't go as planned? Email ealdfnf@gmail.com",
   );
 
   return form;
 }
 
-export function regenerateForm() {
-  const sheet = getWristbandsByCommitteeSheet();
-  getSimplifiedForm(clearForm(getWristbandSubmissionForm()), sheet);
+/**
+* Entry function to create the form
+**/
+export function createForm() {
+  const wristbandSheet = getWristbandsByRole();
+  const clearedForm = clearForm(getForm());
+  createStatelessForm(clearedForm, wristbandSheet);
 }
