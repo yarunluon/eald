@@ -1,10 +1,12 @@
 const Dotenv = require('dotenv-webpack');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const babelObjectAssign = require('babel-plugin-transform-object-assign');
 
 module.exports = {
   entry: {
     'create-form': ['./src/create-form.js'],
+    'create-lists': ['./src/create-lists.js'],
   },
   output: {
     libraryTarget: 'this',
@@ -20,6 +22,7 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: ['env'],
+            plugins: [babelObjectAssign],
           },
         },
       },
