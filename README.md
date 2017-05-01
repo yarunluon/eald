@@ -16,3 +16,22 @@ The generated scripts manage the early arrival and late departure of guests.
 1. Add testing
 1. Write code to send emails with initial EA/LD slots
 1. Convert from Webpack to either Gulp or Make
+1. Split the files to make testing easier. Separate by pure and impure functions.
+
+## Background
+Every year I help organize an annual campout of 700 participants. My specific role is to track the
+people who can arrive early and stay late.
+
+### Inputs
+1. Head organizers give me the number of people per role allowed on-site
+1. Coordinators who supply the names for each role
+1. Names of volunteers from the volunteer sign-up board
+1. People who pay to stay on-site longer
+
+### Outputs
+1. An Early Arrival spreadsheet for staff to verify they can come early
+1. A Late Departure spreadsheet for staff to verify they can stay late
+1. A list of roles and which staff are fulfilling them
+1. A list of names and which roles they are fulfilling
+1. A list for Gate Check staff to give out early arrival wristbands
+1. A list for Late Departure staff to give out late departure wristbands
