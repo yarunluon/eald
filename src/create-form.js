@@ -122,7 +122,7 @@ function createStatelessForm(form, sheet) {
 /**
 * Entry function to create the form
 **/
-function createForm() {
+function createForm() { // eslint-disable-line no-unused-vars
   const wristbandSheet = getWristbandsByRole();
   const clearedForm = clearForm(getForm());
   createStatelessForm(clearedForm, wristbandSheet);

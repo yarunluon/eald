@@ -77,7 +77,7 @@ function getBulkStaffTransactionSheet() {
   return getSheet(1073259260, getAdminSheetId());
 }
 
-function getGorelickSummaryRole() {
+function getGorelickSummaryRole() { // eslint-disable-line no-unused-vars
   return getSheet(1.69092133E8, getSkipperSheetId());
 }
 
@@ -384,7 +384,7 @@ function createRoles(formResponses, roleQuotas) {
   return roles;
 }
 
-function createBulkStaffTransactions(payloads, test) {
+function createBulkStaffTransactions(payloads, test) { // eslint-disable-line no-unused-vars
   const properties = PropertiesService.getScriptProperties();
   const sheet = getBulkStaffTransactionSheet();
   const date = new Date().getTime();
@@ -414,7 +414,7 @@ function createBulkStaffTransactions(payloads, test) {
   return payloads;
 }
 
-function createPrepaidTransaction(transaction) {
+function createPrepaidTransaction(transaction) { // eslint-disable-line no-unused-vars
   const properties = PropertiesService.getScriptProperties();
   const sheet = getPrepaidTransactionSheet();
   const date = new Date().getTime();
@@ -612,7 +612,7 @@ function convertPrepaidToRecords(prepaids) {
   return records;
 }
 
-function reduceRoleCount(accum, value) {
+function reduceRoleCount(accum, value) { // eslint-disable-line no-unused-vars
   return accum + value.early;
 }
 
@@ -807,7 +807,7 @@ function writeStaffSheet(names) {
 * Processors
 *********************************/
 
-function processFormResponses() {
+function processFormResponses() { // eslint-disable-line no-unused-vars
   const roleQuotas = getRoleQuotas();
   const formResponses = getFormResponses();
   const roles = createRoles(formResponses, roleQuotas);
@@ -825,7 +825,7 @@ function processFormResponses() {
   writeRolesSheet(prepaidTransactions, roles);
 }
 
-function processPrepaidResponses() {
+function processPrepaidResponses() { // eslint-disable-line no-unused-vars
   const roleQuotas = getRoleQuotas();
   const formResponses = getFormResponses();
   const roles = createRoles(formResponses, roleQuotas);
