@@ -15,7 +15,6 @@ The generated scripts manage the early arrival and late departure of guests.
 ## TODOs
 1. Add testing
 1. Write code to send emails with initial EA/LD slots
-1. Convert from Webpack to either Gulp or Make
 1. Split the files to make testing easier. Separate by pure and impure functions.
 
 ## Background
