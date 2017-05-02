@@ -2,15 +2,15 @@
 * Get Spreadsheets
 *********************************/
 function getAdminSheetId() {
-  return process.env.ADMIN_SHEET_ID;
+  return 'process.env.ADMIN_SHEET_ID';
 }
 
 function getPublicSheetId() {
-  return process.env.PUBLIC_SHEET_ID;
+  return 'process.env.PUBLIC_SHEET_ID';
 }
 
 function getSkipperSheetId() {
-  return process.env.SKIPPER_SHEET_ID;
+  return 'process.env.SKIPPER_SHEET_ID';
 }
 
 /**
@@ -77,7 +77,7 @@ function getBulkStaffTransactionSheet() {
   return getSheet(1073259260, getAdminSheetId());
 }
 
-export function getGorelickSummaryRole() {
+function getGorelickSummaryRole() {
   return getSheet(1.69092133E8, getSkipperSheetId());
 }
 
@@ -384,7 +384,7 @@ function createRoles(formResponses, roleQuotas) {
   return roles;
 }
 
-export function createBulkStaffTransactions(payloads, test) {
+function createBulkStaffTransactions(payloads, test) {
   const properties = PropertiesService.getScriptProperties();
   const sheet = getBulkStaffTransactionSheet();
   const date = new Date().getTime();
@@ -414,7 +414,7 @@ export function createBulkStaffTransactions(payloads, test) {
   return payloads;
 }
 
-export function createPrepaidTransaction(transaction) {
+function createPrepaidTransaction(transaction) {
   const properties = PropertiesService.getScriptProperties();
   const sheet = getPrepaidTransactionSheet();
   const date = new Date().getTime();
@@ -612,7 +612,7 @@ function convertPrepaidToRecords(prepaids) {
   return records;
 }
 
-export function reduceRoleCount(accum, value) {
+function reduceRoleCount(accum, value) {
   return accum + value.early;
 }
 
@@ -807,7 +807,7 @@ function writeStaffSheet(names) {
 * Processors
 *********************************/
 
-export function processFormResponses() {
+function processFormResponses() {
   const roleQuotas = getRoleQuotas();
   const formResponses = getFormResponses();
   const roles = createRoles(formResponses, roleQuotas);
@@ -825,7 +825,7 @@ export function processFormResponses() {
   writeRolesSheet(prepaidTransactions, roles);
 }
 
-export function processPrepaidResponses() {
+function processPrepaidResponses() {
   const roleQuotas = getRoleQuotas();
   const formResponses = getFormResponses();
   const roles = createRoles(formResponses, roleQuotas);

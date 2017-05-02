@@ -3,7 +3,7 @@
 * @returns {Form} Google Form
 **/
 function getForm() {
-  return FormApp.openById(process.env.FORM_ID);
+  return FormApp.openById('process.env.FORM_ID');
 }
 
 /**
@@ -11,7 +11,7 @@ function getForm() {
 * @returns {Spreadsheet} Google Spreadsheet
 **/
 function getPublicSheet() {
-  return SpreadsheetApp.openById(process.env.PUBLIC_SHEET_ID);
+  return SpreadsheetApp.openById('process.env.PUBLIC_SHEET_ID');
 }
 
 /**
@@ -60,7 +60,7 @@ function getRecordValues(sheet, row, lastColumn) {
 * @param {Spreedsheet} sheet - Spreadsheet about wristbands
 * @returns {Form} The same form with the form items added
 **/
-export function createStatelessForm(form, sheet) {
+function createStatelessForm(form, sheet) {
   const range = sheet.getDataRange();
   const numColumns = range.getNumColumns();
   const numRows = range.getNumRows();
@@ -122,7 +122,7 @@ export function createStatelessForm(form, sheet) {
 /**
 * Entry function to create the form
 **/
-export function createForm() {
+function createForm() {
   const wristbandSheet = getWristbandsByRole();
   const clearedForm = clearForm(getForm());
   createStatelessForm(clearedForm, wristbandSheet);
