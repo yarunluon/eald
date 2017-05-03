@@ -5,7 +5,7 @@ const gulp = require('gulp');
 const replace = require('gulp-replace');
 
 gulp.task('default', () => {
-  gulp.src('src/**')
+  gulp.src(['src/*.js', '!src/*.test.js'])
     // Exported functions confuse GAS. Convert to normal functions
     .pipe(replace('export ', ''))
 
@@ -15,8 +15,8 @@ gulp.task('default', () => {
     .pipe(replace('process.env.PUBLIC_SHEET_ID', process.env.PUBLIC_SHEET_ID))
     .pipe(replace('process.env.SKIPPER_SHEET_ID', process.env.SKIPPER_SHEET_ID))
     .pipe(babel({
-      presets: ['env'],
       plugins: [babelObjectAssign],
+      presets: ['env'],
     }))
     .pipe(gulp.dest('dist'));
   gulp.src('vendor/**')

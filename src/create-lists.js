@@ -1,11 +1,11 @@
 /* ********************************
 * Get Spreadsheets
 *********************************/
-function getAdminSheetId() {
+export function getAdminSheetId() {
   return 'process.env.ADMIN_SHEET_ID';
 }
 
-function getPublicSheetId() {
+export function getPublicSheetId() {
   return 'process.env.PUBLIC_SHEET_ID';
 }
 
@@ -105,7 +105,7 @@ function reduceRoles(accum, role) {
 * @param {array} b - Another array of items
 * @param {number} - -1 if a is first, 0 if a and b are equal, 1 if b is before a
 **/
-function sortNames(a, b) {
+export function sortNames(a, b) {
   const name1 = a[0];
   const name2 = b[0];
   return name1.localeCompare(name2);

@@ -9,7 +9,7 @@
     "deploy": "npm run build && npm run copy",
     "lint": "./node_modules/.bin/eslint src",
     "reinstall": "npm run clean && rm -rf node_modules && npm install",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/jest"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
   "homepage": "https://github.com/yarunluon/eald#readme",
   "devDependencies": {
     "babel-core": "^6.24.1",
+    "babel-jest": "^19.0.0",
     "babel-loader": "^7.0.0",
     "babel-plugin-transform-object-assign": "^6.22.0",
     "babel-preset-env": "^1.4.0",
@@ -38,7 +39,8 @@
     "eslint-plugin-react": "^6.10.3",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
-    "gulp-replace": "^0.5.4"
+    "gulp-replace": "^0.5.4",
+    "jest": "^19.0.2"
   },
   "dependencies": {
     "lodash": "^4.17.4"

@@ -1,5 +1,8 @@
 module.exports = {
   extends: 'airbnb',
+  env: {
+    jest: true,
+  },
   globals: {
     _: false,
     FormApp: false,
