@@ -401,8 +401,6 @@ export function createBulkStaffTransactions(payloads, test) {
     return record;
   });
 
-  Logger.log(records);
-
   if (!test) {
     Logger.log(records);
     records.forEach((record) => {
@@ -441,7 +439,7 @@ export function createPrepaidTransaction(transaction) {
 *********************************/
 
 function getFnFNames() {
-  return []; // ['Flo Landau', 'Noah Thompson'];
+  return [];
 }
 
 function getFnFNameObj() {
@@ -462,9 +460,7 @@ function getFnFNameObj() {
 function mergeNames(namesOriginal) {
   const names = _.merge({}, namesOriginal);
   const fnfNames = getFnFNameObj();
-  // Logger.log(fnfNames);
   _.forEach(fnfNames, (value, name) => {
-    // Logger.log(name);
     if (names[name]) {
       if (!names[name].early.length) {
         names[name].early = names[name].early.concat(fnfNames[name].early);
@@ -475,11 +471,8 @@ function mergeNames(namesOriginal) {
       }
     } else {
       names[name] = fnfNames[name];
-      // Logger.log(names[name]);
     }
   });
-
-  // Logger.log(names);
   return names;
 }
 
