@@ -6,6 +6,10 @@ const replace = require('gulp-replace');
 
 gulp.task('default', () => {
   gulp.src('src/**')
+    // Exported functions confuse GAS. Convert to normal functions
+    .pipe(replace('export ', ''))
+
+    // Expand dotenv variables to their actual values
     .pipe(replace('process.env.ADMIN_SHEET_ID', process.env.ADMIN_SHEET_ID))
     .pipe(replace('process.env.FORM_ID', process.env.FORM_ID))
     .pipe(replace('process.env.PUBLIC_SHEET_ID', process.env.PUBLIC_SHEET_ID))

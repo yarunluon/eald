@@ -77,7 +77,7 @@ function getBulkStaffTransactionSheet() {
   return getSheet(1073259260, getAdminSheetId());
 }
 
-function getGorelickSummaryRole() { // eslint-disable-line no-unused-vars
+export function getGorelickSummaryRole() {
   return getSheet(1.69092133E8, getSkipperSheetId());
 }
 
@@ -384,7 +384,7 @@ function createRoles(formResponses, roleQuotas) {
   return roles;
 }
 
-function createBulkStaffTransactions(payloads, test) { // eslint-disable-line no-unused-vars
+export function createBulkStaffTransactions(payloads, test) {
   const properties = PropertiesService.getScriptProperties();
   const sheet = getBulkStaffTransactionSheet();
   const date = new Date().getTime();
@@ -414,7 +414,7 @@ function createBulkStaffTransactions(payloads, test) { // eslint-disable-line no
   return payloads;
 }
 
-function createPrepaidTransaction(transaction) { // eslint-disable-line no-unused-vars
+export function createPrepaidTransaction(transaction) {
   const properties = PropertiesService.getScriptProperties();
   const sheet = getPrepaidTransactionSheet();
   const date = new Date().getTime();
@@ -612,7 +612,7 @@ function convertPrepaidToRecords(prepaids) {
   return records;
 }
 
-function reduceRoleCount(accum, value) { // eslint-disable-line no-unused-vars
+export function reduceRoleCount(accum, value) {
   return accum + value.early;
 }
 
@@ -807,7 +807,7 @@ function writeStaffSheet(names) {
 * Processors
 *********************************/
 
-function processFormResponses() { // eslint-disable-line no-unused-vars
+export function processFormResponses() {
   const roleQuotas = getRoleQuotas();
   const formResponses = getFormResponses();
   const roles = createRoles(formResponses, roleQuotas);
@@ -825,7 +825,7 @@ function processFormResponses() { // eslint-disable-line no-unused-vars
   writeRolesSheet(prepaidTransactions, roles);
 }
 
-function processPrepaidResponses() { // eslint-disable-line no-unused-vars
+export function processPrepaidResponses() {
   const roleQuotas = getRoleQuotas();
   const formResponses = getFormResponses();
   const roles = createRoles(formResponses, roleQuotas);
