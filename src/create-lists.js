@@ -9,7 +9,7 @@ export function getPublicSheetId() {
   return 'process.env.PUBLIC_SHEET_ID';
 }
 
-function getSkipperSheetId() {
+export function getSkipperSheetId() {
   return 'process.env.SKIPPER_SHEET_ID';
 }
 
@@ -19,7 +19,7 @@ function getSkipperSheetId() {
 * @param {String} spreadsheetId - The spreadsheet id that contains the desired sheet
 * @returns {Sheet} - The desired sheet
 **/
-function getSheet(sheetId, spreadsheetId) {
+export function getSheet(sheetId, spreadsheetId) {
   // Cannot reference script by 'ActiveSheet', because of doPost()
   const sheets = SpreadsheetApp.openById(spreadsheetId).getSheets();
   return _.find(sheets, sheet => sheet.getSheetId() === sheetId);
