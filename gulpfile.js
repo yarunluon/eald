@@ -10,10 +10,10 @@ gulp.task('default', () => {
     .pipe(replace('export ', ''))
 
     // Expand dotenv variables to their actual values
-    .pipe(replace('process.env.ADMIN_SHEET_ID', process.env.ADMIN_SHEET_ID))
+    .pipe(replace('process.env.ADMIN_SPREADSHEET_ID', process.env.ADMIN_SPREADSHEET_ID))
     .pipe(replace('process.env.FORM_ID', process.env.FORM_ID))
-    .pipe(replace('process.env.PUBLIC_SHEET_ID', process.env.PUBLIC_SHEET_ID))
-    .pipe(replace('process.env.SKIPPER_SHEET_ID', process.env.SKIPPER_SHEET_ID))
+    .pipe(replace('process.env.PUBLIC_SPREADSHEET_ID', process.env.PUBLIC_SPREADSHEET_ID))
+    .pipe(replace('process.env.SKIPPER_SPREADSHEET_ID', process.env.SKIPPER_SPREADSHEET_ID))
     .pipe(babel({
       plugins: [babelObjectAssign],
       presets: ['env'],

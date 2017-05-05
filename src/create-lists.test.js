@@ -3,19 +3,16 @@ import * as CreateLists from './create-lists';
 
 beforeAll(() => {
   global._ = _;
+  global.SpreadsheetApp = {
+    openById: () => ({
+      getSheets: () => ([
+        { getSheetId: jest.fn().mockReturnValue('sheetId') },
+      ]),
+    }),
+  };
 });
 
 describe('Spreadsheet management', () => {
-  beforeEach(() => {
-    global.SpreadsheetApp = {
-      openById: () => ({
-        getSheets: () => ([
-          { getSheetId() { return 'sheetId'; } },
-        ]),
-      }),
-    };
-  });
-
   it('should get an admin sheet id', () => {
     expect(typeof CreateLists.getAdminSheetId()).toEqual('string');
   });
@@ -29,8 +26,9 @@ describe('Spreadsheet management', () => {
   });
 
   it('should get a sheet', () => {
-    const sheet = CreateLists.getSheet('sheetId', 'spreadsheetId');
-    expect(sheet.getSheetId()).toEqual('sheetId');
+    const sheetId = SpreadsheetApp.openById('spreadsheetId').getSheets()[0].getSheetId();
+    const sheet = CreateLists.getSheet(sheetId, 'spreadsheetId');
+    expect(sheet.getSheetId()).toEqual(sheetId);
   });
 });
 

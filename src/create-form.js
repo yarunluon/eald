@@ -11,7 +11,7 @@ function getForm() {
 * @returns {Spreadsheet} Google Spreadsheet
 **/
 function getPublicSheet() {
-  return SpreadsheetApp.openById('process.env.PUBLIC_SHEET_ID');
+  return SpreadsheetApp.openById('process.env.PUBLIC_SPREADSHEET_ID');
 }
 
 /**

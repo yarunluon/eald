@@ -2,15 +2,15 @@
 * Get Spreadsheets
 *********************************/
 export function getAdminSheetId() {
-  return 'process.env.ADMIN_SHEET_ID';
+  return 'process.env.ADMIN_SPREADSHEET_ID';
 }
 
 export function getPublicSheetId() {
-  return 'process.env.PUBLIC_SHEET_ID';
+  return 'process.env.PUBLIC_SPREADSHEET_ID';
 }
 
 export function getSkipperSheetId() {
-  return 'process.env.SKIPPER_SHEET_ID';
+  return 'process.env.SKIPPER_SPREADSHEET_ID';
 }
 
 /**
