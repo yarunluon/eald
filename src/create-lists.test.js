@@ -63,6 +63,35 @@ describe('Helper functions', () => {
       'John Snow',
       'Tyrion Lannister',
       'Ned Stark',
-    ]).toEqual(expect.arrayContaining(names));
+    ]).toEqual(names);
+  });
+
+  it('should create records for the roles', () => {
+    const role = 'EA/LD';
+    const slots = 3;
+    const names = ['Ned Stark', 'The Hound'];
+    const type = 'Early Arrival';
+
+    const records = CreateLists.createRoleRecords(role, slots, names, type);
+    expect([
+      ['EA/LD', 'Early Arrival', 'Ned Stark'],
+      ['EA/LD', 'Early Arrival', 'The Hound'],
+      ['EA/LD', 'Early Arrival', ''],
+    ]).toEqual(records);
+  });
+
+  it('should normalize a name', () => {
+    const { normalizeName } = CreateLists;
+    expect(normalizeName('Jon Snow')).toEqual('jonsnow');
+  });
+
+  it('should find names in both lists', () => {
+    const prepaidNames = ['Jon Snow', 'The mountain'];
+    const roleNames = ['jon Snow', 'The Hound'];
+
+    const bothNames = CreateLists.bothNames(prepaidNames, roleNames);
+    expect([
+      'jonsnow',
+    ]).toEqual(bothNames);
   });
 });

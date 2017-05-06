@@ -141,14 +141,14 @@ export function splitNames(names) {
 
 /**
 * Create an array of records for a specific role
-* @param {string} role - Name of role
-* @param {number} slots - How many records
-* @param {string[]} names - Names of people to fill each role
-* @param {string} type - Type of role. Early or Late
-* @returns {array} Record with the following items
+* @param {String} role - Name of role
+* @param {Number} slots - How many records
+* @param {String[]} names - Names of people to fill each role
+* @param {String} type - Type of role. Early or Late
+* @returns {Array[]} Record array with the following items
 *    ```[ role name, role type, name of person]```
 **/
-function createRoleRecords(role, slots, names, type) {
+export function createRoleRecords(role, slots, names, type) {
   const records = _.times(slots, (number) => {
     const name = names.length > number ? names[number] : '';
     const record = [role, type, name];
@@ -160,20 +160,20 @@ function createRoleRecords(role, slots, names, type) {
 
 /**
 * Removes spaces and lowercases names to remove opinions about how to write a name
-* @param {string} - name of person
-* @return {string} - Name of person in all lowercase with spaces removed
+* @param {String} - name of person
+* @return {String} - Name of person in all lowercase with spaces removed
 **/
-function normalizeName(name) {
+export function normalizeName(name) {
   return name.toLowerCase().replace(' ', '');
 }
 
 /**
 * Returns a list of names that have both prepaid and are volunteering
-* @param {string[]} prepaidNames - An array of names that have prepaid
-* @param {string[]} roleNames - An array of names that have volunteered
-* @returns {string[]} - An array of names that have both prepaid and are volunteering
+* @param {String[]} prepaidNames - An array of names that have prepaid
+* @param {String[]} roleNames - An array of names that have volunteered
+* @returns {String[]} - An array of normalized names that are both prepaid and are volunteering
 **/
-function bothNames(prepaidNames, roleNames) {
+export function bothNames(prepaidNames, roleNames) {
   const normalizedRoleNames = roleNames.map(normalizeName);
   const normalizedPrepaidNames = prepaidNames.map(normalizeName);
 
