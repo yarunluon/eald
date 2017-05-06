@@ -87,11 +87,11 @@ export function getGorelickSummaryRole() {
 
 /**
 * Add roles and the total number of slots
-* @param {object} accum - Target object
-* @param {object} role - Used to add to target object
-* @return {object} - Resultant object
+* @param {Object} accum - Target object
+* @param {Object} role - Used to add to target object
+* @return {Object} - Resultant object
 **/
-function reduceRoles(accum, role) {
+export function reduceRoles(accum, role) {
   const nextAccum = Object.assign({}, accum);
   nextAccum.roles.push(role.role);
   // Used for late departure
@@ -101,9 +101,9 @@ function reduceRoles(accum, role) {
 
 /**
 * Sorts records on the first element: name
-* @param {array} a - Array of items
-* @param {array} b - Another array of items
-* @param {number} - -1 if a is first, 0 if a and b are equal, 1 if b is before a
+* @param {Array} a - Array of items
+* @param {Array} b - Another array of items
+* @param {Number} - -1 if a is first, 0 if a and b are equal, 1 if b is before a
 **/
 export function sortNames(a, b) {
   const name1 = a[0];
@@ -113,10 +113,10 @@ export function sortNames(a, b) {
 
 /**
 * Takes a string of names and converts to an array of names. Handles comma and new line delimited
-* @param {string} names - A comma- or newline-separated list of names
-* @return {string[]} - An array of names that are Capital Cased
+* @param {String} names - A comma- or newline-separated list of names
+* @return {String[]} - An array of names that are Capital Cased
 **/
-function splitNames(names) {
+export function splitNames(names) {
   const parseableNames = names || '';
 
   // Separate by delimiter

@@ -38,4 +38,31 @@ describe('Helper functions', () => {
     expect(CreateLists.sortNames('a', 'a')).toBe(0);
     expect(CreateLists.sortNames('b', 'a')).toBe(1);
   });
+
+  it('should combine roles', () => {
+    const roles = {
+      roles: [],
+      slots: 0,
+    };
+
+    const role = {
+      role: 'test role',
+      slots: 2,
+    };
+
+    const nextRoles = CreateLists.reduceRoles(roles, role);
+    expect(nextRoles.roles.includes(role.role)).toBeTruthy();
+    expect(nextRoles.slots).toEqual(2);
+  });
+
+  it('should parse names into an array', () => {
+    const nameString = 'Sansa Stark,John Snow,   Tyrion lannister  , ned Stark, ,  ';
+    const names = CreateLists.splitNames(nameString);
+    expect([
+      'Sansa Stark',
+      'John Snow',
+      'Tyrion Lannister',
+      'Ned Stark',
+    ]).toEqual(expect.arrayContaining(names));
+  });
 });
