@@ -1,15 +1,15 @@
 /* ********************************
 * Get Spreadsheets
 *********************************/
-export function getAdminSheetId() {
+export function getAdminSpreadsheetId() {
   return 'process.env.ADMIN_SPREADSHEET_ID';
 }
 
-export function getPublicSheetId() {
+export function getPublicSpreadsheetId() {
   return 'process.env.PUBLIC_SPREADSHEET_ID';
 }
 
-export function getSkipperSheetId() {
+export function getSkipperSpreadsheetId() {
   return 'process.env.SKIPPER_SPREADSHEET_ID';
 }
 
@@ -25,60 +25,98 @@ export function getSheet(sheetId, spreadsheetId) {
   return _.find(sheets, sheet => sheet.getSheetId() === sheetId);
 }
 
-function getFormResponsesSheet() {
-  return getSheet(1179034234, getAdminSheetId());
+/* ********************************
+* Source of Truth sheets
+*********************************/
+
+/**
+* Get the form responses from the Google Spreadsheet as pure javascript array
+* @returns {Array[]} Array of records.
+**/
+function getFormResponsesRawData() {
+  const DATA_START_ROW = 2;
+  const DATA_START_COL = 1;
+
+  const sheet = getSheet(4803021, getAdminSpreadsheetId());
+  const range = sheet.getDataRange();
+  const numRows = range.getNumRows();
+  const numCols = range.getNumColumns();
+  return sheet.getSheetValues(DATA_START_ROW, DATA_START_COL, numRows, numCols);
+}
+
+/**
+* Get the prepaid transactions from the Google Spreadsheet as pure javascript array
+* @returns {Array[]} Array of records.
+**/
+function getPrepaidRawData() {
+  const DATA_START_ROW = 1;
+  const DATA_START_COL = 1;
+
+  const sheet = getSheet(9.73336414E8, getAdminSpreadsheetId());
+  const range = sheet.getDataRange();
+  const numRows = range.getNumRows();
+  const numCols = range.getNumColumns();
+
+  return sheet.getSheetValues(DATA_START_ROW, DATA_START_COL, numRows, numCols);
+}
+
+/**
+* Get the writeband quotas from the Google Spreadsheet as pure javascript array
+* @returns {Array[]} Array of records.
+**/
+function getRolesQuotaRawData() {
+  const DATA_START_ROW = 3;
+  const DATA_START_COL = 1;
+
+  const sheet = getSheet(0.0, getPublicSpreadsheetId());
+  const range = sheet.getDataRange();
+  const numRows = range.getNumRows();
+  const numCols = range.getNumColumns();
+  return sheet.getSheetValues(DATA_START_ROW, DATA_START_COL, numRows, numCols);
 }
 
 function getParsedFormResonsesSheet() {
-  return getSheet(1532955100, getAdminSheetId());
+  return getSheet(1532955100, getAdminSpreadsheetId());
 }
 
 function getRolesSheet() {
-  return getSheet(1925990317, getAdminSheetId());
+  return getSheet(1925990317, getAdminSpreadsheetId());
 }
 
 function getNamesSheet() {
-  return getSheet(8.75854503E8, getAdminSheetId());
-}
-
-function getPrepaidTransactionSheet() {
-  return getSheet(9.73336414E8, getAdminSheetId());
+  return getSheet(8.75854503E8, getAdminSpreadsheetId());
 }
 
 function getPrepaidSheet() {
-  return getSheet(8.4040037E7, getAdminSheetId());
+  return getSheet(8.4040037E7, getAdminSpreadsheetId());
 }
 
 function getGateCheckSheet() {
-  return getSheet(2.063889254E9, getAdminSheetId());
+  return getSheet(2.063889254E9, getAdminSpreadsheetId());
 }
 
 function getLateDepartureSheet() {
-  return getSheet(3.73855201E8, getAdminSheetId());
+  return getSheet(3.73855201E8, getAdminSpreadsheetId());
 }
 
 function getPublicEarlyArrivalSheet() {
-  return getSheet(5.23892843E8, getPublicSheetId());
+  return getSheet(5.23892843E8, getPublicSpreadsheetId());
 }
 
 function getPublicLateDepartureSheet() {
-  return getSheet(1.48670578E8, getPublicSheetId());
+  return getSheet(1.48670578E8, getPublicSpreadsheetId());
 }
 
 function getAuthorizedStaffSheet() {
-  return getSheet(1.627289332E9, getPublicSheetId());
-}
-
-function getWristbandsByRoleSheet() {
-  return getSheet(0.0, getPublicSheetId());
+  return getSheet(1.627289332E9, getPublicSpreadsheetId());
 }
 
 function getBulkStaffTransactionSheet() {
-  return getSheet(1073259260, getAdminSheetId());
+  return getSheet(1073259260, getAdminSpreadsheetId());
 }
 
 export function getGorelickSummaryRole() {
-  return getSheet(1.69092133E8, getSkipperSheetId());
+  return getSheet(1.69092133E8, getSkipperSpreadsheetId());
 }
 
 /* ********************************
@@ -87,16 +125,17 @@ export function getGorelickSummaryRole() {
 
 /**
 * Add roles and the total number of slots
-* @param {Object} accum - Target object
+* @param {Object} roles - Current Tabulated roles
 * @param {Object} role - Used to add to target object
-* @return {Object} - Resultant object
+* @return {Object} - New object of roles with current one merged
 **/
-export function reduceRoles(accum, role) {
-  const nextAccum = Object.assign({}, accum);
-  nextAccum.roles.push(role.role);
-  // Used for late departure
-  nextAccum.slots += role.slots;
-  return nextAccum;
+export function addRole(roles, role) {
+  const { roles: prevRoles = [], slots: prevSlots = 0 } = roles;
+  const nextRoles = {
+    roles: prevRoles.concat(role.role),
+    slots: prevSlots + role.slots,
+  };
+  return nextRoles;
 }
 
 /**
@@ -186,8 +225,9 @@ export function bothNames(prepaidNames, roleNames) {
 *********************************/
 
 /**
-*
-* @returns {Object} An object keyed by name
+* Reorganizes the prepaid records by person's name
+* @param {Arra[]} rawData - Array of raw data records
+* @returns {Object} An object keyed by a person's name
 * ```
 * [name]: {
 *   timestamp: number
@@ -199,19 +239,9 @@ export function bothNames(prepaidNames, roleNames) {
 * }
 * ```
 **/
-function getPrepaidTransactions() {
-  const sheet = getPrepaidTransactionSheet();
-  const DATA_START_ROW = 1;
-  const range = sheet.getDataRange();
-  const numRows = range.getNumRows();
-  const numCols = range.getNumColumns();
-  const tids = {};
-  const prepaids = {};
-
-  _.forEach(_.range(DATA_START_ROW, numRows + 1), (number) => {
-    const formRecord = sheet.getSheetValues(number, 1, 1, numCols)[0];
-    // var [timestamp, tid, name, early, late, email] = formRecord;
-    const [name, email, tid, early, late, timestamp] = formRecord;
+export function getPrepaidTransactions(rawData) {
+  const uniquePrepaids = rawData.reduce((prepaids, record) => {
+    const [name, email, tid, early, late, timestamp] = record;
     const recordObj = {
       timestamp,
       tid,
@@ -220,64 +250,64 @@ function getPrepaidTransactions() {
       late,
       email,
     };
-    tids[tid] = recordObj;
-  });
+    return Object.assign({}, prepaids, { [tid]: recordObj });
+  }, {});
 
-  Object.keys(tids).forEach((tid) => {
-    const prepaid = tids[tid];
-    const existingRecord = prepaids[prepaid.name];
+  const allPrepaids = _.reduce(uniquePrepaids, (prepaids, prepaid) => {
+    const { [prepaid.name]: { early = 0, late = 0 } = {} } = prepaids;
+    const nextPrepaid = {
+      [prepaid.name]: {
+        ...prepaid,
+        early: early + prepaid.early,
+        late: late + prepaid.late,
+      },
+    };
 
-    if (!_.isEmpty(existingRecord)) {
-      // Combining the different transactions by the same person
-      prepaid.early += existingRecord.early;
-      prepaid.late += existingRecord.late;
-    }
-    prepaids[prepaid.name] = prepaid;
-  });
+    return Object.assign({}, prepaids, nextPrepaid);
+  }, {});
 
-  return prepaids;
+  return allPrepaids;
 }
 
 /**
 * Converts the raw form responses into an object
+* @param {Array[]} rawData - Array of form response records
 * @returns {Object} The latest form response keyed by form id of the role
+* ```
+* {
+*   [role form id]: [role record],
+* }
+* ```
 **/
-function getFormResponses() {
-  const formResponsesSheet = getFormResponsesSheet();
-  const DATA_START_ROW = 2;
-  const range = formResponsesSheet.getDataRange();
-  const numRows = range.getNumRows();
-  const numCols = range.getNumColumns();
-  const roles = {};
+export function getFormResponses(rawData) {
+  const allRoles = rawData.reduce((roles, record) => {
+    const [, roleFormId] = record;
+    return roleFormId ? Object.assign({}, roles, { [roleFormId]: record }) : roles;
+  }, {});
 
-  _.forEach(_.range(DATA_START_ROW, numRows + 1), (number) => {
-    const formRecord = _.compact(formResponsesSheet.getSheetValues(number, 1, 1, numCols)[0]);
-    const [, role] = formRecord;
-    if (role) {
-      roles[role] = formRecord;
-    }
-  });
-
-  return roles;
+  return allRoles;
 }
 
-function getRoleQuotas() {
-  const sheet = getWristbandsByRoleSheet();
-  const roleWristbandMap = {};
-  const range = sheet.getDataRange();
-  const numRows = range.getNumRows();
-  const numCols = range.getNumColumns();
-  const values = sheet.getSheetValues(3, 1, numRows, numCols);
-
-  values.forEach((record) => {
-    const [id] = record;
-    roleWristbandMap[id] = record;
-  });
+/**
+* Gets the wristband quotas for each role
+* @param {Array[]} rawData - Array of role quota records
+* @returns {Object} The wristband quotas keyed on role id
+* ```
+* {
+*   [role id]: [role record],
+* }
+* ```
+**/
+export function getRoleQuotas(rawData) {
+  const allWristbands = rawData.reduce((wristbands, record) => {
+    const [roleId] = record;
+    return Object.assign({}, wristbands, { [roleId]: record });
+  }, {});
 
   // Special role
-  roleWristbandMap.fnf = ['fnf', 'FnF', 'FnF', 50, 50, '', ''];
+  allWristbands.fnf = ['fnf', 'FnF', 'FnF', 30, 30, '', ''];
 
-  return roleWristbandMap;
+  return allWristbands;
 }
 
 /* ********************************
@@ -414,7 +444,7 @@ export function createBulkStaffTransactions(payloads, test) {
 
 export function createPrepaidTransaction(transaction) {
   const properties = PropertiesService.getScriptProperties();
-  const sheet = getPrepaidTransactionSheet();
+  const sheet = getPrepaidRawData();
   const date = new Date().getTime();
 
   const record = [
@@ -486,7 +516,7 @@ function getNamesRecords(allNames, type) {
   const names = _.omitBy(allNames, attrs => _.isEmpty(attrs[type]));
 
   Object.keys(names).forEach((name) => {
-    const roles = _.reduce(allNames[name][type], reduceRoles, { roles: [], slots: 0 });
+    const roles = _.reduce(allNames[name][type], addRole, { roles: [], slots: 0 });
     const record = [name, _.upperFirst(type), type === 'early' ? 1 : roles.slots].concat(roles.roles.sort());
     records.push(record);
   });
@@ -557,7 +587,7 @@ function convertToEaldRecords(prepaids, roles, type) {
       ealdPrepaidsRole => normalizeName(name) === normalizeName(ealdPrepaidsRole.name),
     );
 
-    const rolesAccum = _.reduce(allEaldRoles[name][type], reduceRoles, { roles: [], slots: 0 });
+    const rolesAccum = _.reduce(allEaldRoles[name][type], addRole, { roles: [], slots: 0 });
     const totalSlots = (type === 'early' ? 1 : rolesAccum.slots) + prepaid[type];
     const totalRoles = rolesAccum.roles.concat(['Prepaid']).sort();
     const record = [name, totalSlots].concat(totalRoles);
@@ -575,7 +605,7 @@ function convertToEaldRecords(prepaids, roles, type) {
   // Add role records
   Object.keys(ealdRolesOnly).forEach((name) => {
     const ealdRoles = allEaldRoles[name][type];
-    const rolesAccum = _.reduce(ealdRoles, reduceRoles, { roles: [], slots: 0 });
+    const rolesAccum = _.reduce(ealdRoles, addRole, { roles: [], slots: 0 });
 
     const record = [name, type === 'early' ? 1 : rolesAccum.slots].concat(rolesAccum.roles.sort());
     records.push(record);
@@ -801,11 +831,11 @@ function writeStaffSheet(names) {
 *********************************/
 
 export function processFormResponses() {
-  const roleQuotas = getRoleQuotas();
-  const formResponses = getFormResponses();
+  const roleQuotas = getRoleQuotas(getRolesQuotaRawData());
+  const formResponses = getFormResponses(getFormResponsesRawData());
   const roles = createRoles(formResponses, roleQuotas);
   const allNames = createNames(roles);
-  const prepaidTransactions = getPrepaidTransactions();
+  const prepaidTransactions = getPrepaidTransactions(getPrepaidRawData());
 
 
   writeParsedFormResponsesSheet(formResponses, roleQuotas);
@@ -819,11 +849,11 @@ export function processFormResponses() {
 }
 
 export function processPrepaidResponses() {
-  const roleQuotas = getRoleQuotas();
-  const formResponses = getFormResponses();
+  const roleQuotas = getRoleQuotas(getRolesQuotaRawData());
+  const formResponses = getFormResponses(getFormResponsesRawData());
   const roles = createRoles(formResponses, roleQuotas);
   const allNames = createNames(roles);
-  const prepaidTransactions = getPrepaidTransactions();
+  const prepaidTransactions = getPrepaidTransactions(getPrepaidRawData());
 
   writePrepaidSheet(prepaidTransactions);
   writeGateCheckSheet(prepaidTransactions, allNames);

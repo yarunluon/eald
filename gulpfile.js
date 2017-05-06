@@ -1,11 +1,12 @@
 require('dotenv').config();
 const babel = require('gulp-babel');
 const babelObjectAssign = require('babel-plugin-transform-object-assign');
+const babelSpreadOperator = require('babel-plugin-transform-object-rest-spread');
 const gulp = require('gulp');
 const replace = require('gulp-replace');
 
 gulp.task('default', () => {
-  gulp.src(['src/*.js', '!src/*.test.js'])
+  gulp.src(['src/*.js', '!src/*.test.js', '!src/*-mocks.js'])
     // Exported functions confuse GAS. Convert to normal functions
     .pipe(replace('export ', ''))
 
@@ -15,10 +16,11 @@ gulp.task('default', () => {
     .pipe(replace('process.env.PUBLIC_SPREADSHEET_ID', process.env.PUBLIC_SPREADSHEET_ID))
     .pipe(replace('process.env.SKIPPER_SPREADSHEET_ID', process.env.SKIPPER_SPREADSHEET_ID))
     .pipe(babel({
-      plugins: [babelObjectAssign],
+      plugins: [babelObjectAssign, babelSpreadOperator],
       presets: ['env'],
     }))
     .pipe(gulp.dest('dist'));
+
   gulp.src('vendor/**')
     .pipe(gulp.dest('dist'));
 });

@@ -1,32 +1,30 @@
 import _ from 'lodash';
 import * as CreateLists from './create-lists';
+import * as GasMocks from './gas-mocks';
+
+import formJson from './fixtures/form-responses.json';
+import prepaidJson from './fixtures/prepaid-transactions.json';
+import wristbandJson from './fixtures/wristband-quotas.json';
 
 beforeAll(() => {
-  global._ = _;
-  global.SpreadsheetApp = {
-    openById: () => ({
-      getSheets: () => ([
-        { getSheetId: jest.fn().mockReturnValue('sheetId') },
-      ]),
-    }),
-  };
+  Object.assign(global, GasMocks, { _ });
 });
 
 describe('Spreadsheet management', () => {
   it('should get an admin sheet id', () => {
-    expect(typeof CreateLists.getAdminSheetId()).toEqual('string');
+    expect(typeof CreateLists.getAdminSpreadsheetId()).toEqual('string');
   });
 
   it('should get a public sheet id', () => {
-    expect(typeof CreateLists.getPublicSheetId()).toEqual('string');
+    expect(typeof CreateLists.getPublicSpreadsheetId()).toEqual('string');
   });
 
   it('should get a skipper sheet id', () => {
-    expect(typeof CreateLists.getSkipperSheetId()).toEqual('string');
+    expect(typeof CreateLists.getSkipperSpreadsheetId()).toEqual('string');
   });
 
   it('should get a sheet', () => {
-    const sheetId = SpreadsheetApp.openById('spreadsheetId').getSheets()[0].getSheetId();
+    const sheetId = GasMocks.SpreadsheetApp.openById('spreadsheetId').getSheets()[0].getSheetId();
     const sheet = CreateLists.getSheet(sheetId, 'spreadsheetId');
     expect(sheet.getSheetId()).toEqual(sheetId);
   });
@@ -50,7 +48,7 @@ describe('Helper functions', () => {
       slots: 2,
     };
 
-    const nextRoles = CreateLists.reduceRoles(roles, role);
+    const nextRoles = CreateLists.addRole(roles, role);
     expect(nextRoles.roles.includes(role.role)).toBeTruthy();
     expect(nextRoles.slots).toEqual(2);
   });
@@ -93,5 +91,29 @@ describe('Helper functions', () => {
     expect([
       'jonsnow',
     ]).toEqual(bothNames);
+  });
+});
+
+describe('Spreadsheet Getters', () => {
+  it('should get the prepaid transactions', () => {
+    const prepaids = CreateLists.getPrepaidTransactions(prepaidJson);
+
+    const prepaid = prepaids['Doran Mortell'];
+    expect(prepaid).toHaveProperty('timestamp');
+    expect(prepaid).toHaveProperty('tid');
+    expect(prepaid).toHaveProperty('name');
+    expect(prepaid).toHaveProperty('early');
+    expect(prepaid).toHaveProperty('late');
+    expect(prepaid).toHaveProperty('email');
+  });
+
+  it('should get the form responses', () => {
+    const formResponses = CreateLists.getFormResponses(formJson);
+    expect(formResponses['EA/LD']).toEqual(formJson[1]);
+  });
+
+  it('should get the wristabnd quotas', () => {
+    const wristbands = CreateLists.getRoleQuotas(wristbandJson);
+    expect(wristbands.eald).toEqual(wristbandJson[2]);
   });
 });
