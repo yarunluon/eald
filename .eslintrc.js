@@ -11,6 +11,7 @@ module.exports = {
     SpreadsheetApp: false,
   },
   rules: {
+    // GAS doesn't like how babel transpiles default exports
     'import/prefer-default-export': 'off',
   },
 }

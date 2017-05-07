@@ -13,7 +13,7 @@ The generated scripts manage the early arrival and late departure of guests in t
 1. `npm run reinstall` will remove `dist/` and `node_modules/` and reinstall all dependencies.
 
 ## Background
-Every year I help organize an annual campout of 700 participants. My specific role is to track the
+Every year my volunteer group organizes an annual campout of 700 participants. My specific role is to track the
 people who can arrive early and stay late.
 
 ## Project Goals
