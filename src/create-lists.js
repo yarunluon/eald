@@ -34,14 +34,13 @@ export function getSheet(sheetId, spreadsheetId) {
 * @returns {Array[]} Array of records.
 **/
 function getFormResponsesRawData() {
-  const DATA_START_ROW = 2;
-  const DATA_START_COL = 1;
+  const ROW_START = 2;
+  const COL_START = 1;
 
   const sheet = getSheet(4803021, getAdminSpreadsheetId());
   const range = sheet.getDataRange();
-  const numRows = range.getNumRows();
-  const numCols = range.getNumColumns();
-  return sheet.getSheetValues(DATA_START_ROW, DATA_START_COL, numRows, numCols);
+  const { getNumRows, getNumColumns } = range;
+  return sheet.getSheetValues(ROW_START, COL_START, getNumRows(), getNumColumns());
 }
 
 /**
@@ -49,15 +48,13 @@ function getFormResponsesRawData() {
 * @returns {Array[]} Array of records.
 **/
 function getPrepaidRawData() {
-  const DATA_START_ROW = 1;
-  const DATA_START_COL = 1;
+  const ROW_START = 1;
+  const COL_START = 1;
 
   const sheet = getSheet(9.73336414E8, getAdminSpreadsheetId());
   const range = sheet.getDataRange();
-  const numRows = range.getNumRows();
-  const numCols = range.getNumColumns();
-
-  return sheet.getSheetValues(DATA_START_ROW, DATA_START_COL, numRows, numCols);
+  const { getNumRows, getNumColumns } = range;
+  return sheet.getSheetValues(ROW_START, COL_START, getNumRows(), getNumColumns());
 }
 
 /**
@@ -65,14 +62,13 @@ function getPrepaidRawData() {
 * @returns {Array[]} Array of records.
 **/
 function getRolesQuotaRawData() {
-  const DATA_START_ROW = 3;
-  const DATA_START_COL = 1;
+  const ROW_START = 3;
+  const COL_START = 1;
 
   const sheet = getSheet(0.0, getPublicSpreadsheetId());
   const range = sheet.getDataRange();
-  const numRows = range.getNumRows();
-  const numCols = range.getNumColumns();
-  return sheet.getSheetValues(DATA_START_ROW, DATA_START_COL, numRows, numCols);
+  const { getNumRows, getNumColumns } = range;
+  return sheet.getSheetValues(ROW_START, COL_START, getNumRows(), getNumColumns());
 }
 
 function getParsedFormResonsesSheet() {
