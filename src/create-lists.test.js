@@ -4,7 +4,7 @@ import * as GasMocks from './gas-mocks';
 
 import formJson from './fixtures/form-responses.json';
 import prepaidJson from './fixtures/prepaid-transactions.json';
-import wristbandJson from './fixtures/wristband-quotas.json';
+import quotasJson from './fixtures/wristband-quotas.json';
 
 beforeAll(() => {
   Object.assign(global, GasMocks, { _ });
@@ -113,7 +113,37 @@ describe('Spreadsheet Getters', () => {
   });
 
   it('should get the wristabnd quotas', () => {
-    const wristbands = CreateLists.getRoleQuotas(wristbandJson);
-    expect(wristbands.eald).toEqual(wristbandJson[2]);
+    const quotas = CreateLists.getRoleQuotas(quotasJson);
+    expect(quotas.eald).toEqual(quotasJson[2]);
+    expect(quotas).toHaveProperty('fnf');
+  });
+});
+
+describe('Creators', () => {
+  it('should create a role object', () => {
+    const formRecord = _.last(formJson);
+    const roleRecord = _.find(quotasJson, (quota) => {
+      const [, quotaId] = quota;
+      const [, formId] = formRecord;
+      return formId === quotaId;
+    });
+    const [id, formId, name, earlySlots, lateSlots, skipper] = roleRecord;
+    const [timestamp] = formRecord;
+
+    const role = CreateLists.createRole(roleRecord, formRecord);
+    expect(role).toHaveProperty('early');
+    expect(role.early.slots).toBe(earlySlots);
+    expect(role).toHaveProperty('early.names');
+    expect(role).toHaveProperty('early.extra');
+    expect(role).toHaveProperty('late');
+    expect(role).toHaveProperty('late.names');
+    expect(role.late.slots).toBe(lateSlots);
+    expect(role).toHaveProperty('late.extraNames');
+    expect(role).toHaveProperty('emails');
+    expect(role.formId).toEqual(formId);
+    expect(role.id).toEqual(id);
+    expect(role.name).toEqual(name);
+    expect(role.skipper).toEqual(skipper);
+    expect(role.timestamp).toEqual(timestamp);
   });
 });

@@ -320,7 +320,7 @@ export function getRoleQuotas(rawData) {
 * @params {Array} formRecord - A record of the names of the role from the form
 * @returns {Object} Role object
 **/
-function createRole(roleRecord, formRecord) {
+export function createRole(roleRecord, formRecord) {
   const [timestamp] = formRecord;
   const [id, formId, name, earlySlots, lateSlots, skipper] = roleRecord;
   const earlyIndex = 2;
@@ -339,18 +339,18 @@ function createRole(roleRecord, formRecord) {
 
   const role = {
     early: {
-      slots: earlySlots,
-      names: earlyNames,
       extra: extraEarlyNames,
-    },
-    late: {
-      names: lateNames,
-      slots: lateSlots,
-      extraNames: extraLateNames,
+      names: earlyNames,
+      slots: earlySlots,
     },
     emails,
     formId,
     id,
+    late: {
+      extraNames: extraLateNames,
+      names: lateNames,
+      slots: lateSlots,
+    },
     name,
     skipper,
     timestamp,
