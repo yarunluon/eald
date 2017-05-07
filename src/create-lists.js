@@ -321,21 +321,18 @@ export function getRoleQuotas(rawData) {
 * @returns {Object} Role object
 **/
 export function createRole(roleRecord, formRecord) {
-  const [timestamp] = formRecord;
-  const [id, formId, name, earlySlots, lateSlots, skipper] = roleRecord;
-  const earlyIndex = 2;
-  const lateIndex = 3;
-  const EMAIL_START_INDEX = 6;
+  const [timestamp,, rawEarlyNames, rawLateNames, reporter = '', reporterEmail = ''] = formRecord;
+  const [id, formId, name, earlySlots, lateSlots, skipper, ...allEmails] = roleRecord;
 
-  const earlyNamesPool = splitNames(formRecord[earlyIndex]) || [];
-  const earlyNames = earlySlots ? earlyNamesPool.slice(0, earlySlots).sort() : [];
-  const extraEarlyNames = earlySlots ? earlyNamesPool.slice(earlySlots) : [];
+  const allEarlyNames = splitNames(rawEarlyNames) || [];
+  const earlyNames = earlySlots > 0 ? allEarlyNames.slice(0, earlySlots).sort() : [];
+  const extraEarlyNames = earlySlots > 0 ? allEarlyNames.slice(earlySlots) : [];
 
-  const lateNamesPool = splitNames(formRecord[lateIndex]) || [];
-  const lateNames = lateSlots ? lateNamesPool.slice(0, lateSlots).sort() : [];
+  const allLateNames = splitNames(rawLateNames) || [];
+  const lateNames = lateSlots > 0 ? allLateNames.slice(0, lateSlots).sort() : [];
+  const extraLateNames = lateSlots > 0 ? allLateNames.slice(lateSlots) : [];
 
-  const extraLateNames = lateSlots ? lateNamesPool.slice(lateSlots) : [];
-  const emails = _.compact(roleRecord.slice(EMAIL_START_INDEX));
+  const emails = _.compact(allEmails);
 
   const role = {
     early: {
@@ -347,11 +344,13 @@ export function createRole(roleRecord, formRecord) {
     formId,
     id,
     late: {
-      extraNames: extraLateNames,
+      extra: extraLateNames,
       names: lateNames,
       slots: lateSlots,
     },
     name,
+    reporter,
+    reporterEmail,
     skipper,
     timestamp,
   };
@@ -540,7 +539,7 @@ function convertToParsedFormResponses(responses, roleQuotas) {
       // role.reporterEmail,
       role.name,
       role.early.slots ? role.early.names.concat(role.early.extra).join(', ') : '',
-      role.late.slots ? role.late.names.concat(role.late.extraNames).join(', ') : '',
+      role.late.slots ? role.late.names.concat(role.late.extra).join(', ') : '',
       //[role.late.email].concat(role.late.extraEmails).join(','),
     ];
   });
