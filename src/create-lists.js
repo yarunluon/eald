@@ -364,7 +364,7 @@ export function createRole(roleRecord, formRecord) {
 * @param {String[]} omittedRoles - A list of role ids to omit
 * @returns {Object} Names object
 **/
-function createNames(roles, omittedRoles = []) {
+export function createNames(roles, omittedRoles = []) {
   const names = {};
   Object.keys(_.omit(roles, omittedRoles)).sort().forEach((roleId) => {
     // Add role to each name
@@ -394,6 +394,12 @@ function createNames(roles, omittedRoles = []) {
   return names;
 }
 
+/**
+* Creates the roles object. Contains all the information. Names and role quotas
+* @param {Object} formResponses - Object of form responses keyed on role's form id
+* @param {Object} roleQuotas -Object of role quotas keyed on role's role id
+* @returns {Object} Complete roles object.
+*/
 function createRoles(formResponses, roleQuotas) {
   const roles = {};
 

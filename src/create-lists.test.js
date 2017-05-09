@@ -5,6 +5,7 @@ import * as GasMocks from './gas-mocks';
 import formJson from './fixtures/form-responses.json';
 import prepaidJson from './fixtures/prepaid-transactions.json';
 import quotasJson from './fixtures/wristband-quotas.json';
+import { ROLES } from './fixtures/roles';
 
 beforeAll(() => {
   Object.assign(global, GasMocks, { _ });
@@ -147,5 +148,13 @@ describe('Creators', () => {
     expect(role.reporterEmail).toEqual(reporterEmail);
     expect(role.skipper).toEqual(skipper);
     expect(role.timestamp).toEqual(timestamp);
+  });
+
+  it('should create a name object', () => {
+    const roles = ROLES;
+    const names = CreateLists.createNames(roles);
+
+    expect(names.Nella.early.length).toBe(2);
+    expect(names['Norbert Vance'].late.length).toBe(2);
   });
 });
