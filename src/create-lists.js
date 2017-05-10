@@ -419,6 +419,13 @@ function createRoles(formResponses, roleQuotas) {
   return roles;
 }
 
+/**
+* Takes an object of payload records and converts them to bulk staff transactions
+* @todo Verify if this function is needed. If not, remove.
+* @param {Object[]} payloads - An array of payload objects
+* @param {Boolean} test - True if the record should be written to the sheet. False otherwise.
+* @returns {Object[]} An array of bulk staff transaction objects
+*/
 export function createBulkStaffTransactions(payloads, test) {
   const properties = PropertiesService.getScriptProperties();
   const sheet = getBulkStaffTransactionSheet();
@@ -447,6 +454,12 @@ export function createBulkStaffTransactions(payloads, test) {
   return payloads;
 }
 
+/**
+* Takes a transaction object and adds it to the spreadsheet
+* @todo Verify if this function is needed. Remove otherwise.
+* @param {Object} transaction - Prepaid transaction
+* @return {Object} A new transaction object with a date attribute
+*/
 export function createPrepaidTransaction(transaction) {
   const properties = PropertiesService.getScriptProperties();
   const sheet = getPrepaidRawData();
