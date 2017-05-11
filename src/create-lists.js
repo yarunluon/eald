@@ -486,10 +486,18 @@ export function createPrepaidTransaction(transaction) {
 * FnF
 *********************************/
 
+/**
+* List of FnF names
+* @returns {Array} Array of FnF names
+**/
 function getFnFNames() {
   return [];
 }
 
+/**
+* Create a special Names object fof fnf names
+* @returns {Object} Names object with fnf names
+**/
 function getFnFNameObj() {
   const names = getFnFNames();
   const earlySlots = names.length;
@@ -505,6 +513,11 @@ function getFnFNameObj() {
   return createNames(fnfObject);
 }
 
+/**
+* Modifies the original roles object with FnF names
+* @param {Object} namesOriginal - Complete roles object
+* @returns {Object} new names object with the fnf names
+**/
 function mergeNames(namesOriginal) {
   const names = _.merge({}, namesOriginal);
   const fnfNames = getFnFNameObj();
