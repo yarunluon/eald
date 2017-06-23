@@ -736,11 +736,13 @@ function writeGateCheckSheet(prepaidTransactions, names) {
   const sheet = getGateCheckSheet().clearContents();
   const earlyArrivalRecords = convertToEaldRecords(prepaidTransactions, names, 'early');
   const headerRecord = [
-    ['', 'Name', 'Num', 'Type', '', 'Last updated:', Date()],
+    ['Name', 'Num', 'Type', '', 'Last updated:', Date()],
   ];
   const dataRecords = earlyArrivalRecords.map((record) => {
     const roles = record.slice(EALD_TYPE).map(role => (role === 'Prepaid' ? role : 'Authorized'));
-    return ['❑', record[NAME], record[EALD_NUM]].concat(roles);
+    // Array.fill does not work in GAS and there is no babel polyfill for it
+    const checkboxes = _.times(record[EALD_NUM], () => '❑');
+    return [record[NAME], record[EALD_NUM]].concat(roles).concat(checkboxes);
   });
   const records = headerRecord.concat(dataRecords);
 
