@@ -7,6 +7,7 @@ module.exports = {
     _: false,
     FormApp: false,
     Logger: false,
+    MailApp: false,
     PropertiesService: false,
     SpreadsheetApp: false,
   },
