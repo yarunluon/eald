@@ -37,7 +37,7 @@ function getFormResponsesRawData() {
   const DATA_START_ROW = 2;
   const DATA_START_COL = 1;
 
-  const sheet = getSheet(1770860682, getAdminSpreadsheetId());
+  const sheet = getSheet(1531881700, getAdminSpreadsheetId());
   const range = sheet.getDataRange();
   const numRows = range.getNumRows();
   const numCols = range.getNumColumns();
