@@ -999,7 +999,7 @@ export function sendQuotaEmail() {
     '',
 
     // First batch of emails
-    //     'carcamping',
+    'carcamping',
     'externalkitchen',
     'hydration',
     'milf',
