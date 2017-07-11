@@ -950,7 +950,8 @@ function getQuotaHtmlBody(quota) {
     `You have <b>${earlySlots} Early Arrival ${eaPasses} </b> and <b>${lateSlots} Late Departure ${ldPasses}</b>. ` +
     `There is no need to purchase these passes. They are given to you as part of being ${coordArticle} ${name} Coordinator. ` +
     '<p />' +
-    'At your earliest convenience, could you send me the list of names for these passes?' +
+    'At your earliest convenience, could you send me the list of names for these passes? ' +
+    'For LD passes, as a Coordinator, you can pick them all up and hand them out to your volunteers. Just let me know.' +
     '<p />' +
     `If you need more passes, please contact your skipper, ${skipper}, and CC me. ` +
     'For any other questions, respond back to this email.' +
@@ -999,17 +1000,24 @@ export function sendQuotaEmail() {
     '',
 
     // First batch of emails
+    'altars',
+    'artandartfunding',
+    'artgrantartists',
+    'cafebruxia',
     'carcamping',
+    'chilllounge',
     'externalkitchen',
     'hydration',
     'milf',
     'recording',
+    'schpank',
     'shade',
     'shuttleteam',
+    'sitecoordinators',
+    'skippers',
   ];
 
   const whitelist = [
-
   ];
 
   const pickedRoleQuotas = _.pick(roleQuotas, whitelist);
