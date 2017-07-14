@@ -951,7 +951,7 @@ function getQuotaHtmlBody(quota) {
     `There is no need to purchase these passes. They are given to you as part of being ${coordArticle} ${name} Coordinator. ` +
     '<p />' +
     'At your earliest convenience, could you send me the list of names for these passes? ' +
-    'For LD passes, as a Coordinator, you can pick them all up and hand them out to your volunteers. Just let me know.' +
+    'For LD passes, as a Coordinator, you can pick them all up and hand them out to your volunteers (Highly recommended). Let me know.' +
     '<p />' +
     `If you need more passes, please contact your skipper, ${skipper}, and CC me. ` +
     'For any other questions, respond back to this email.' +
@@ -1006,15 +1006,28 @@ export function sendQuotaEmail() {
     'cafebruxia',
     'carcamping',
     'chilllounge',
+    'chilloutplatform',
+    'eald',
     'externalkitchen',
+    'gate',
     'hydration',
+    'lighting',
+    'mildew',
     'milf',
+    'mold',
+    'morninglibations',
+    'parking',
+    'power',
     'recording',
     'schpank',
+    'signs,info',
     'shade',
     'shuttleteam',
     'sitecoordinators',
     'skippers',
+    'sound,main',
+    'sound,pool',
+    'transportation',
   ];
 
   const whitelist = [
