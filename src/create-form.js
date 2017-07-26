@@ -1,7 +1,7 @@
 /**
 * Gets the form to submit ea/ld names
 * @returns {Form} Google Form
-**/
+* */
 function getForm() {
   return FormApp.openById('process.env.FORM_ID');
 }
@@ -9,7 +9,7 @@ function getForm() {
 /**
 * Gets the public facing spreadsheet
 * @returns {Spreadsheet} Google Spreadsheet
-**/
+* */
 function getPublicSheet() {
   return SpreadsheetApp.openById('process.env.PUBLIC_SPREADSHEET_ID');
 }
@@ -17,7 +17,7 @@ function getPublicSheet() {
 /**
 * Gets the sheet containing the wristbands by role
 * @returns {Sheet} Google sheet summarizing the wristbands by role
-**/
+* */
 function getWristbandsByRole() {
   const id = 0.0;
   const spreadsheet = getPublicSheet();
@@ -28,7 +28,7 @@ function getWristbandsByRole() {
 * Removes all items in the form
 * @param {Form} - Google Form
 * @returns {Form} - The same form, but with all items removed
-**/
+* */
 function clearForm(form) {
   form.getItems().forEach((item) => {
     try {
@@ -47,7 +47,7 @@ function clearForm(form) {
 * @param {Number} The row index within the sheet to return
 * @param {Number} The last column to return in the row
 * @returns {Array} The record from the sheet
-**/
+* */
 function getRecordValues(sheet, row, lastColumn) {
   const FIRST_COLUMN = 1;
   const NUM_ROWS = 1;
@@ -59,7 +59,7 @@ function getRecordValues(sheet, row, lastColumn) {
 * @param {Form} form         - Google Form
 * @param {Spreedsheet} sheet - Spreadsheet about wristbands
 * @returns {Form} The same form with the form items added
-**/
+* */
 function createStatelessForm(form, sheet) {
   const range = sheet.getDataRange();
   const numColumns = range.getNumColumns();
@@ -121,7 +121,7 @@ function createStatelessForm(form, sheet) {
 
 /**
 * Entry function to create the form
-**/
+* */
 export function createForm() {
   const wristbandSheet = getWristbandsByRole();
   const clearedForm = clearForm(getForm());

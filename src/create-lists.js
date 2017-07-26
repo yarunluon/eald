@@ -1,6 +1,6 @@
 /* ********************************
 * Get Spreadsheets
-*********************************/
+******************************** */
 export function getAdminSpreadsheetId() {
   return 'process.env.ADMIN_SPREADSHEET_ID';
 }
@@ -18,7 +18,7 @@ export function getSkipperSpreadsheetId() {
 * @param {Number} sheetId - The sheet id within the spreadsheet
 * @param {String} spreadsheetId - The spreadsheet id that contains the desired sheet
 * @returns {Sheet} - The desired sheet
-**/
+* */
 export function getSheet(sheetId, spreadsheetId) {
   // Cannot reference script by 'ActiveSheet', because of doPost()
   const sheets = SpreadsheetApp.openById(spreadsheetId).getSheets();
@@ -27,12 +27,12 @@ export function getSheet(sheetId, spreadsheetId) {
 
 /* ********************************
 * Source of Truth sheets
-*********************************/
+******************************** */
 
 /**
 * Get the form responses from the Google Spreadsheet as pure javascript array
 * @returns {Array[]} Array of records.
-**/
+* */
 function getFormResponsesRawData() {
   const DATA_START_ROW = 2;
   const DATA_START_COL = 1;
@@ -47,7 +47,7 @@ function getFormResponsesRawData() {
 /**
 * Get the prepaid transactions from the Google Spreadsheet as pure javascript array
 * @returns {Array[]} Array of records.
-**/
+* */
 function getPrepaidRawData() {
   const DATA_START_ROW = 1;
   const DATA_START_COL = 1;
@@ -63,7 +63,7 @@ function getPrepaidRawData() {
 /**
 * Get the writeband quotas from the Google Spreadsheet as pure javascript array
 * @returns {Array[]} Array of records.
-**/
+* */
 function getRolesQuotaRawData() {
   const DATA_START_ROW = 3;
   const DATA_START_COL = 1;
@@ -121,14 +121,14 @@ export function getGorelickSummaryRole() {
 
 /* ********************************
 * Helpers
-*********************************/
+******************************** */
 
 /**
 * Add roles and the total number of slots
 * @param {Object} roles - Current Tabulated roles
 * @param {Object} role - Used to add to target object
 * @return {Object} - New object of roles with current one merged
-**/
+* */
 export function addRole(roles, role) {
   const { roles: prevRoles = [], slots: prevSlots = 0 } = roles;
   const nextRoles = {
@@ -143,7 +143,7 @@ export function addRole(roles, role) {
 * @param {Array} a - Array of items
 * @param {Array} b - Another array of items
 * @param {Number} - -1 if a is first, 0 if a and b are equal, 1 if b is before a
-**/
+* */
 export function sortNames(a, b) {
   const name1 = a[0];
   const name2 = b[0];
@@ -154,7 +154,7 @@ export function sortNames(a, b) {
 * Takes a string of names and converts to an array of names. Handles comma and new line delimited
 * @param {String} names - A comma- or newline-separated list of names
 * @return {String[]} - An array of names that are Capital Cased
-**/
+* */
 export function splitNames(names) {
   const parseableNames = names || '';
 
@@ -186,7 +186,7 @@ export function splitNames(names) {
 * @param {String} type - Type of role. Early or Late
 * @returns {Array[]} Record array with the following items
 *    ```[ role name, role type, name of person]```
-**/
+* */
 export function createRoleRecords(role, slots, names, type) {
   const records = _.times(slots, (number) => {
     const name = names.length > number ? names[number] : '';
@@ -201,7 +201,7 @@ export function createRoleRecords(role, slots, names, type) {
 * Removes spaces and lowercases names to remove opinions about how to write a name
 * @param {String} - name of person
 * @return {String} - Name of person in all lowercase with spaces removed
-**/
+* */
 export function normalizeName(name) {
   return name.toLowerCase().replace(' ', '');
 }
@@ -211,7 +211,7 @@ export function normalizeName(name) {
 * @param {String[]} prepaidNames - An array of names that have prepaid
 * @param {String[]} roleNames - An array of names that have volunteered
 * @returns {String[]} - An array of normalized names that are both prepaid and are volunteering
-**/
+* */
 export function bothNames(prepaidNames, roleNames) {
   const normalizedRoleNames = roleNames.map(normalizeName);
   const normalizedPrepaidNames = prepaidNames.map(normalizeName);
@@ -222,7 +222,7 @@ export function bothNames(prepaidNames, roleNames) {
 
 /* ********************************
 * Getters
-*********************************/
+******************************** */
 
 /**
 * Reorganizes the prepaid records by person's name
@@ -238,7 +238,7 @@ export function bothNames(prepaidNames, roleNames) {
 *   email: string
 * }
 * ```
-**/
+* */
 export function getPrepaidTransactions(rawData) {
   const uniquePrepaids = rawData.reduce((prepaids, record) => {
     const [name, email, tid, early, late, timestamp] = record;
@@ -278,7 +278,7 @@ export function getPrepaidTransactions(rawData) {
 *   [role form id]: [role record],
 * }
 * ```
-**/
+* */
 export function getFormResponses(rawData) {
   const allRoles = rawData.reduce((roles, record) => {
     const [, roleFormId] = record;
@@ -297,7 +297,7 @@ export function getFormResponses(rawData) {
 *   [role id]: [role record],
 * }
 * ```
-**/
+* */
 export function getRoleQuotas(rawData) {
   const allWristbands = rawData.reduce((wristbands, record) => {
     const [roleId] = record;
@@ -312,14 +312,14 @@ export function getRoleQuotas(rawData) {
 
 /* ********************************
 * Creators
-*********************************/
+******************************** */
 
 /**
 * Create a role object
 * @params {Array} roleRecord - A record of all the information for a role
 * @params {Array} formRecord - A record of the names of the role from the form
 * @returns {Object} Role object
-**/
+* */
 export function createRole(roleRecord, formRecord) {
   const [timestamp,, rawEarlyNames, rawLateNames, reporter = '', reporterEmail = ''] = formRecord;
   const [id, formId, name, earlySlots, lateSlots, skipper, ...allEmails] = roleRecord;
@@ -363,7 +363,7 @@ export function createRole(roleRecord, formRecord) {
 * @param {Object} roles - All the information about roles keyed by role id
 * @param {String[]} omittedRoles - A list of role ids to omit
 * @returns {Object} Names object
-**/
+* */
 export function createNames(roles, omittedRoles = []) {
   const names = {};
   Object.keys(_.omit(roles, omittedRoles)).sort().forEach((roleId) => {
@@ -484,12 +484,12 @@ export function createPrepaidTransaction(transaction) {
 
 /* ********************************
 * FnF
-*********************************/
+******************************** */
 
 /**
 * List of FnF names
 * @returns {Array} Array of FnF names
-**/
+* */
 function getFnFNames() {
   return [];
 }
@@ -497,7 +497,7 @@ function getFnFNames() {
 /**
 * Create a special Names object fof fnf names
 * @returns {Object} Names object with fnf names
-**/
+* */
 function getFnFNameObj() {
   const names = getFnFNames();
   const earlySlots = names.length;
@@ -517,7 +517,7 @@ function getFnFNameObj() {
 * Modifies the original roles object with FnF names
 * @param {Object} namesOriginal - Complete roles object
 * @returns {Object} new names object with the fnf names
-**/
+* */
 function mergeNames(namesOriginal) {
   const names = _.merge({}, namesOriginal);
   const fnfNames = getFnFNameObj();
@@ -539,7 +539,7 @@ function mergeNames(namesOriginal) {
 
 /* ********************************
 * Converters
-*********************************/
+******************************** */
 
 function getNamesRecords(allNames, type) {
   const records = [];
@@ -559,7 +559,7 @@ function getNamesRecords(allNames, type) {
 * Convert the raw form responses in an organized format
 * @param {Object} responses - The latest form response per role keyed on role
 * @param {Object} roleQuotas - The quotas allowed per role keyed on role
-**/
+* */
 function convertToParsedFormResponses(responses, roleQuotas) {
   const FORM_ID_INDEX = 1;
   const records = Object.keys(responses).sort().map((formId) => {
@@ -585,7 +585,7 @@ function convertToParsedFormResponses(responses, roleQuotas) {
 * @param {Object} roles - ALl the information about roles: early, late, names, etc
 * @param {String} type - Either 'early' or 'late'
 * @returns {Array} - A list of all the prepaids and roles by a type (early or late)
-**/
+* */
 function convertToEaldRecords(prepaids, roles, type) {
   const records = [];
   const ealdPrepaids = _.filter(prepaids, prepaid => prepaid[type] > 0);
@@ -698,7 +698,7 @@ function convertPrepaidToRoles(prepaids) {
 * Convert the entire collection of roles to record format
 * @param {Object} - All role information: Early arrival, late departure, who is what role
 * @returns {Array} - Array format of the object to be printed to a sheet
-**/
+* */
 function convertToRolesRecords(roles) {
   let roleRecords = [];
   const roleIds = Object.keys(_.omit(roles, ['fnf'])).sort();
@@ -713,7 +713,7 @@ function convertToRolesRecords(roles) {
 
 /* ********************************
 * Writers
-*********************************/
+******************************** */
 
 function writeParsedFormResponsesSheet(responses, roleQuotas) {
   const sheet = getParsedFormResonsesSheet().clearContents();
@@ -862,7 +862,7 @@ function writeStaffSheet(names) {
 
 /* ********************************
 * Processors
-*********************************/
+******************************** */
 
 export function processFormResponses() {
   const roleQuotas = getRoleQuotas(getRolesQuotaRawData());
@@ -899,7 +899,7 @@ export function processPrepaidResponses() {
 
 /* ********************************
 * Emails
-*********************************/
+******************************** */
 
 const templates = {
   greeting: 'Hello,',
@@ -991,7 +991,7 @@ function getQuotaEmailParams(quota) {
 *   ```
 *   const [timestamp,, rawEarlyNames, rawLateNames, reporter = '', reporterEmail = ''] = formRecord;
 *   ```
-**/
+* */
 export function sendQuotaEmail() {
   const roleQuotas = getRoleQuotas(getRolesQuotaRawData());
 
