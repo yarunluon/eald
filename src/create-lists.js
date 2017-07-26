@@ -742,7 +742,8 @@ function writeGateCheckSheet(prepaidTransactions, names) {
     const roles = record.slice(EALD_TYPE).map(role => (role === 'Prepaid' ? role : 'Authorized'));
     // Array.fill does not work in GAS and there is no babel polyfill for it
     const checkboxes = _.times(record[EALD_NUM], () => '❑');
-    return [record[NAME], record[EALD_NUM]].concat(roles).concat(checkboxes);
+    const uniqueRoles = _.uniq(roles);
+    return [record[NAME], record[EALD_NUM]].concat(uniqueRoles.join(', ')).concat(checkboxes);
   });
   const records = headerRecord.concat(dataRecords);
 
@@ -1009,6 +1010,7 @@ export function sendQuotaEmail() {
     'chilloutplatform',
     'eald',
     'externalkitchen',
+    'food-earlystaff',
     'gate',
     'hydration',
     'lighting',
@@ -1052,7 +1054,7 @@ function getPrepaidHtmlBody(prepaid) {
   const ldPasses = (parseInt(late, 10) || 0) === 1 ? 'pass' : 'passes';
 
   const body =
-    `I'm confirming you bought <b>${early} Early Arrival ${eaPasses} </b> and <b>${late} Late Departure ${ldPasses}</b>.
+    `I'm the Early Arrival / Late Depature (EA/LD) coordinator. I'm confirming you bought <b>${early} Early Arrival ${eaPasses} </b> and <b>${late} Late Departure ${ldPasses}</b>.
     If this is not true, let me know.
     <p />
     ${early ? 'EA passes are picked up at the Gate. If you bought multiple passes for other people, have them mention your name at the Gate. ' : ''}
@@ -1077,12 +1079,12 @@ function getPrepaidHtmlBody(prepaid) {
 * }
 */
 function getPrepaidEmailParams(prepaid) {
-  // const { email } = prepaid;
+  const { email } = prepaid;
 
   const subject = '[EA/LD] Your prepaid EA/LD passes';
   // const toEmails = _.compact(allEmails);
   const htmlBody = getPrepaidHtmlBody(prepaid);
-  const uniqueToEmails = _.union(['yarunl@gmail.com'], []).join(',');
+  const uniqueToEmails = _.union([], [email]).join(',');
 
   return {
     to: uniqueToEmails,
@@ -1095,10 +1097,10 @@ function getPrepaidEmailParams(prepaid) {
 export function sendPrepaidEmail() {
   const prepaids = getPrepaidTransactions(getPrepaidRawData());
 
-  const blacklist = [];
+  const blacklist = [''];
   _.forEach(_.omit(prepaids, blacklist), (prepaid) => {
     const emailParams = getPrepaidEmailParams(prepaid);
-    // Logger.log(emailParams);
-    MailApp.sendEmail(emailParams);
+    Logger.log(emailParams);
+    // MailApp.sendEmail(emailParams);
   });
 }
