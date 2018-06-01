@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import * as CreateLists from './create-lists';
+import * as CreateLists from '../dist-test/create-lists';
 import * as GasMocks from './gas-mocks';
 
 import formJson from './fixtures/form-responses.json';
@@ -22,6 +22,10 @@ describe('Spreadsheet management', () => {
 
   it('should get a skipper sheet id', () => {
     expect(typeof CreateLists.getSkipperSpreadsheetId()).toEqual('string');
+  });
+
+  it('gets a Form Response Sheet id', () => {
+    expect(typeof CreateLists.getFormResponseSheetId()).toEqual('number');
   });
 
   it('should get a sheet', () => {

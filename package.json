@@ -3,14 +3,15 @@
   "version": "2.0.0",
   "description": "Early Arrival / Late Departure",
   "scripts": {
-    "build": "npm run clean && gulp",
-    "clean": "rimraf dist",
+    "build": "rimraf dist && gulp",
+    "clean": "rimraf dist dist-test",
     "copy": "./scripts/copy.sh",
     "deploy": "npm run build && npm run copy",
     "lint": "eslint src",
     "reinstall": "npm run clean && rimraf node_modules && npm install",
+    "pretest": "rimraf dist-test && gulp test-build",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "npm run test -- --watch"
   },
   "repository": {
     "type": "git",
