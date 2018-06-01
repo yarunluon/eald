@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "description": "Early Arrival / Late Departure",
   "scripts": {
-    "build": "./node_modules/.bin/gulp",
-    "clean": "rm -rf dist/",
+    "build": "npm run clean && gulp",
+    "clean": "rimraf dist",
     "copy": "./scripts/copy.sh",
     "deploy": "npm run build && npm run copy",
-    "lint": "./node_modules/.bin/eslint src",
-    "reinstall": "npm run clean && rm -rf node_modules && npm install",
-    "test": "./node_modules/.bin/jest",
-    "watch": "./node_modules/.bin/jest --watch"
+    "lint": "eslint src",
+    "reinstall": "npm run clean && rimraf node_modules && npm install",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",
@@ -28,21 +28,22 @@
   "homepage": "https://github.com/yarunluon/eald#readme",
   "devDependencies": {
     "babel-core": "^6.25.0",
-    "babel-jest": "^20.0.3",
+    "babel-jest": "^23.0.1",
     "babel-loader": "^7.1.0",
     "babel-plugin-transform-object-assign": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.5.2",
-    "dotenv": "^4.0.0",
-    "eslint": "^3.19.0",
-    "eslint-config-airbnb": "^15.0.1",
+    "dotenv": "^5.0.1",
+    "eslint": "^4.19.0",
+    "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.5.0",
-    "eslint-plugin-jsx-a11y": "^5.0.3",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.1.0",
     "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
-    "gulp-replace": "^0.6.1",
-    "jest": "^20.0.4"
+    "gulp-babel": "^7.0.1",
+    "gulp-replace": "^1.0.0",
+    "jest": "^23.1.0",
+    "rimraf": "^2.6.2"
   },
   "dependencies": {
     "lodash": "^4.17.4"
