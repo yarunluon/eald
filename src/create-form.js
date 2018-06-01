@@ -110,11 +110,9 @@ function createStatelessForm(form, sheet) {
   form.addPageBreakItem()
     .setTitle('Almost done. Hit the button below.');
 
-  form.setConfirmationMessage(
-    'Done.\n\n' +
+  form.setConfirmationMessage('Done.\n\n' +
     'Made a mistake? Submit a new response.\n\n' +
-    "Something didn't go as planned? Email ealdfnf@gmail.com",
-  );
+    "Something didn't go as planned? Email ealdfnf@gmail.com");
 
   return form;
 }

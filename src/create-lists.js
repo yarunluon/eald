@@ -169,11 +169,9 @@ export function splitNames(names) {
     // Separate by name parts
     String(fullname).trim().split(' ').map(name =>
       // Capitalize first letter
-      name.slice(0, 1).toUpperCase() + name.slice(1),
-    )
+      name.slice(0, 1).toUpperCase() + name.slice(1))
     // Recombine name parts
-    .join(' '),
-  );
+      .join(' '));
 
   return _.compact(prettyNames);
 }
@@ -572,7 +570,7 @@ function convertToParsedFormResponses(responses, roleQuotas) {
       role.name,
       role.early.slots ? role.early.names.concat(role.early.extra).join(', ') : '',
       role.late.slots ? role.late.names.concat(role.late.extra).join(', ') : '',
-      //[role.late.email].concat(role.late.extraEmails).join(','),
+      // [role.late.email].concat(role.late.extraEmails).join(','),
     ];
   });
 
