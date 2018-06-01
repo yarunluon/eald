@@ -127,7 +127,7 @@ function getBulkStaffTransactionSheet() {
   return getSheet(process.env.BULK_STAFF_TRANSACTION_SHEET_ID, getAdminSpreadsheetId());
 }
 
-export function getGorelickSummaryRole() {
+export function getSkipperSummaryRole() {
   return getSheet(process.env.SKIPPER_SHEET_ID, getSkipperSpreadsheetId());
 }
 
@@ -236,7 +236,7 @@ export function bothNames(prepaidNames, roleNames) {
 
 /**
 * Reorganizes the prepaid records by person's name
-* @param {Arra[]} rawData - Array of raw data records
+* @param {Array[]} rawData - Array of raw data records
 * @returns {Object} An object keyed by a person's name
 * ```
 * [name]: {
