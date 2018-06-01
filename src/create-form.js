@@ -66,7 +66,7 @@ function createStatelessForm(form, sheet) {
   const numRows = range.getNumRows();
   const DATA_FIRST_ROW = 3;
 
-  form.setTitle('FnF XXI - EA/LD volunteer signup');
+  form.setTitle('FnF XXII - EA/LD volunteer signup');
   form.setShowLinkToRespondAgain(true);
   form.setShuffleQuestions(false);
   form.setPublishingSummary(false);
@@ -96,16 +96,6 @@ function createStatelessForm(form, sheet) {
   form.addParagraphTextItem()
     .setTitle('Late departure names')
     .setHelpText('Separate all names with a comma. Repeat the name if they are picking up more than one.');
-
-  form.addPageBreakItem().setTitle('Contact information');
-
-  form.addTextItem()
-    .setTitle('Who are you?')
-    .setRequired(false);
-
-  form.addTextItem()
-    .setTitle('What is your email?')
-    .setRequired(false);
 
   form.addPageBreakItem()
     .setTitle('Almost done. Hit the button below.');
