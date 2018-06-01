@@ -1,6 +1,6 @@
 {
   "name": "eald",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Early Arrival / Late Departure",
   "scripts": {
     "build": "npm run clean && gulp",
