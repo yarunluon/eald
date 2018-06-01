@@ -13,6 +13,18 @@ export function getSkipperSpreadsheetId() {
   return 'process.env.SKIPPER_SPREADSHEET_ID';
 }
 
+export function getFormResponseSheetId() {
+  return process.env.FORM_RESPONSE_SHEET_ID;
+}
+
+export function getPrepaidRawDataSheetId() {
+  return process.env.PREPAID_RAWDATA_SHEET_ID;
+}
+
+export function getRolesQuotaRawDataSheetId() {
+  return process.env.ROLES_QUOTA_SHEET_ID;
+}
+
 /**
 * Get the specific sheet within the spreadsheet
 * @param {Number} sheetId - The sheet id within the spreadsheet
@@ -37,7 +49,7 @@ function getFormResponsesRawData() {
   const DATA_START_ROW = 2;
   const DATA_START_COL = 1;
 
-  const sheet = getSheet(1531881700, getAdminSpreadsheetId());
+  const sheet = getSheet(getFormResponseSheetId(), getAdminSpreadsheetId());
   const range = sheet.getDataRange();
   const numRows = range.getNumRows();
   const numCols = range.getNumColumns();
@@ -52,7 +64,7 @@ function getPrepaidRawData() {
   const DATA_START_ROW = 1;
   const DATA_START_COL = 1;
 
-  const sheet = getSheet(9.73336414E8, getAdminSpreadsheetId());
+  const sheet = getSheet(getPrepaidRawDataSheetId(), getAdminSpreadsheetId());
   const range = sheet.getDataRange();
   const numRows = range.getNumRows();
   const numCols = range.getNumColumns();
@@ -68,7 +80,7 @@ function getRolesQuotaRawData() {
   const DATA_START_ROW = 3;
   const DATA_START_COL = 1;
 
-  const sheet = getSheet(0.0, getPublicSpreadsheetId());
+  const sheet = getSheet(getRolesQuotaRawDataSheetId(), getPublicSpreadsheetId());
   const range = sheet.getDataRange();
   const numRows = range.getNumRows();
   const numCols = range.getNumColumns();
@@ -76,47 +88,47 @@ function getRolesQuotaRawData() {
 }
 
 function getParsedFormResonsesSheet() {
-  return getSheet(1532955100, getAdminSpreadsheetId());
+  return getSheet(process.env.PARSED_FORM_RESPONSES_SHEET_ID, getAdminSpreadsheetId());
 }
 
 function getRolesSheet() {
-  return getSheet(1925990317, getAdminSpreadsheetId());
+  return getSheet(process.env.ROLES_SHEET_ID, getAdminSpreadsheetId());
 }
 
 function getNamesSheet() {
-  return getSheet(8.75854503E8, getAdminSpreadsheetId());
+  return getSheet(process.env.NAMES_SHEET_ID, getAdminSpreadsheetId());
 }
 
 function getPrepaidSheet() {
-  return getSheet(8.4040037E7, getAdminSpreadsheetId());
+  return getSheet(process.env.PREPAID_SHEET_ID, getAdminSpreadsheetId());
 }
 
 function getGateCheckSheet() {
-  return getSheet(2.063889254E9, getAdminSpreadsheetId());
+  return getSheet(process.env.GATE_CHECK_SHEET_ID, getAdminSpreadsheetId());
 }
 
 function getLateDepartureSheet() {
-  return getSheet(3.73855201E8, getAdminSpreadsheetId());
+  return getSheet(process.env.LATE_DEPARTURES_SHEET_ID, getAdminSpreadsheetId());
 }
 
 function getPublicEarlyArrivalSheet() {
-  return getSheet(5.23892843E8, getPublicSpreadsheetId());
+  return getSheet(process.env.PUBLIC_EARLY_ARRIVALS_SHEET_ID, getPublicSpreadsheetId());
 }
 
 function getPublicLateDepartureSheet() {
-  return getSheet(1.48670578E8, getPublicSpreadsheetId());
+  return getSheet(process.env.PUBLIC_LATE_DEPARTURES_SHEET_ID, getPublicSpreadsheetId());
 }
 
 function getAuthorizedStaffSheet() {
-  return getSheet(1.627289332E9, getPublicSpreadsheetId());
+  return getSheet(process.env.AUTHORIZED_STAFF_SHEET_ID, getPublicSpreadsheetId());
 }
 
 function getBulkStaffTransactionSheet() {
-  return getSheet(1073259260, getAdminSpreadsheetId());
+  return getSheet(process.env.BULK_STAFF_TRANSACTION_SHEET_ID, getAdminSpreadsheetId());
 }
 
 export function getGorelickSummaryRole() {
-  return getSheet(1.69092133E8, getSkipperSpreadsheetId());
+  return getSheet(process.env.SKIPPER_SHEET_ID, getSkipperSpreadsheetId());
 }
 
 /* ********************************
