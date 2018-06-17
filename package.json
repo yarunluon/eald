@@ -9,7 +9,7 @@
     "deploy": "npm run build && npm run copy",
     "lint": "eslint src",
     "reinstall": "npm run clean && rimraf node_modules && npm install",
-    "pretest": "rimraf dist-test && gulp test-build",
+    "pretest": "rimraf dist-test",
     "test": "jest",
     "test:watch": "npm run test -- --watch"
   },

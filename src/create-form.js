@@ -97,6 +97,10 @@ function createStatelessForm(form, sheet) {
     .setTitle('Late departure names')
     .setHelpText('Separate all names with a comma. Repeat the name if they are picking up more than one.');
 
+  form.addParagraphTextItem()
+    .setTitle('LD-Lite names')
+    .setHelpText('Separate all names with a comma. Repeat the name if they are picking up more than one.');
+
   form.addPageBreakItem()
     .setTitle('Almost done. Hit the button below.');
 
