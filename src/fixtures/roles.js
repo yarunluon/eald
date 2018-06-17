@@ -12,7 +12,7 @@ export const ROLES = {
       names: ['Nute the Barber', 'Norbert Vance'],
       slots: 2,
     },
-    'ld-lite': {
+    ldLite: {
       extra: [],
       names: ['Nute the Barber', 'Norbert Vance'],
       slots: 2,
@@ -36,7 +36,7 @@ export const ROLES = {
       names: ['Norbert Vance', 'Norbert Vance'],
       slots: 2,
     },
-    'ld-lite': {
+    ldLite: {
       extra: [],
       names: ['Nute the Barber', 'Norbert Vance'],
       slots: 2,

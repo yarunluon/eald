@@ -344,7 +344,7 @@ export function getRoleQuotas(rawData) {
 * @returns {Object} Role object
 * */
 export function createRole(roleRecord, formRecord) {
-  const [timestamp,, rawEarlyNames, rawLateNames, reporter = '', reporterEmail = ''] = formRecord;
+  const [timestamp,, rawEarlyNames, rawLateNames, rawLdLiteNames, reporter = '', reporterEmail = ''] = formRecord;
   const [id, name, earlySlots, lateSlots, ldLiteSlots, skipper, ...allEmails] = roleRecord;
 
   const allEarlyNames = splitNames(rawEarlyNames) || [];
@@ -354,6 +354,10 @@ export function createRole(roleRecord, formRecord) {
   const allLateNames = splitNames(rawLateNames) || [];
   const lateNames = lateSlots > 0 ? allLateNames.slice(0, lateSlots).sort() : [];
   const extraLateNames = lateSlots > 0 ? allLateNames.slice(lateSlots) : [];
+
+  const allLdLiteNames = splitNames(rawLdLiteNames) || [];
+  const ldLiteNames = ldLiteSlots > 0 ? allLdLiteNames.slice(0, ldLiteSlots).sort() : [];
+  const extraLdLiteNames = ldLiteSlots > 0 ? allLdLiteNames.slice(ldLiteSlots) : [];
 
   const emails = _.compact(allEmails);
 
@@ -371,8 +375,8 @@ export function createRole(roleRecord, formRecord) {
       slots: lateSlots,
     },
     ldLite: {
-      extra: [],
-      names: [],
+      extra: extraLdLiteNames,
+      names: ldLiteNames,
       slots: ldLiteSlots,
     },
     name,

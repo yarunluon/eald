@@ -136,7 +136,7 @@ describe('Creators', () => {
       return formId === quotaId;
     });
     const [id, name, earlySlots, lateSlots, ldLiteSlots, skipper] = roleRecord;
-    const [timestamp,,,, reporter = '', reporterEmail = ''] = formRecord;
+    const [timestamp,,,,, reporter = '', reporterEmail = ''] = formRecord;
 
     const role = CreateLists.createRole(roleRecord, formRecord);
     expect(role).toHaveProperty('early');
@@ -146,8 +146,10 @@ describe('Creators', () => {
     expect(role).toHaveProperty('late');
     expect(role).toHaveProperty('late.names');
     expect(role.late.slots).toBe(lateSlots);
-    expect(role.ldLite.slots).toBe(ldLiteSlots);
     expect(role).toHaveProperty('late.extra');
+    expect(role.ldLite.slots).toBe(ldLiteSlots);
+    expect(role).toHaveProperty('ldLite.names');
+    expect(role).toHaveProperty('ldLite.extra');
     expect(role).toHaveProperty('emails');
     expect(role.id).toEqual(id);
     expect(role.name).toEqual(name);
