@@ -7,11 +7,11 @@ function getForm() {
 }
 
 /**
-* Gets the admin facing spreadsheet
+* Gets the raw data facing spreadsheet
 * @returns {Spreadsheet} Google Spreadsheet
 * */
-function getAdminSheet() {
-  return SpreadsheetApp.openById('process.env.ADMIN_SPREADSHEET_ID');
+function getRawDataSheet() {
+  return SpreadsheetApp.openById('process.env.RAW_DATA_SPREADSHEET_ID');
 }
 
 /**
@@ -20,7 +20,7 @@ function getAdminSheet() {
 * */
 function getWristbandsByRole() {
   const id = +'process.env.ADMIN_ROLES_QUOTA_SHEET_ID';
-  const spreadsheet = getAdminSheet();
+  const spreadsheet = getRawDataSheet();
   return _.filter(spreadsheet.getSheets(), sheet => sheet.getSheetId() === id)[0];
 }
 

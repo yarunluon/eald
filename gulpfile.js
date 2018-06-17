@@ -14,6 +14,7 @@ gulp.task('default', () => {
     .pipe(replace('process.env.ADMIN_SPREADSHEET_ID', process.env.ADMIN_SPREADSHEET_ID))
     .pipe(replace('process.env.FORM_ID', process.env.FORM_ID))
     .pipe(replace('process.env.PUBLIC_SPREADSHEET_ID', process.env.PUBLIC_SPREADSHEET_ID))
+    .pipe(replace('process.env.RAW_DATA_SPREADSHEET_ID', process.env.RAW_DATA_SPREADSHEET_ID))
     .pipe(replace('process.env.SKIPPER_SPREADSHEET_ID', process.env.SKIPPER_SPREADSHEET_ID))
 
     // Sheet ids
@@ -52,6 +53,7 @@ gulp.task('test-build', () => {
     .pipe(replace('process.env.ADMIN_SPREADSHEET_ID', process.env.ADMIN_SPREADSHEET_ID))
     .pipe(replace('process.env.FORM_ID', process.env.FORM_ID))
     .pipe(replace('process.env.PUBLIC_SPREADSHEET_ID', process.env.PUBLIC_SPREADSHEET_ID))
+    .pipe(replace('process.env.RAW_DATA_SPREADSHEET_ID', process.env.RAW_DATA_SPREADSHEET_ID))
     .pipe(replace('process.env.SKIPPER_SPREADSHEET_ID', process.env.SKIPPER_SPREADSHEET_ID))
 
     // Sheet ids

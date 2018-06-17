@@ -13,6 +13,10 @@ export function getSkipperSpreadsheetId() {
   return 'process.env.SKIPPER_SPREADSHEET_ID';
 }
 
+export function getRawDataSpreadsheetId() {
+  return 'process.env.RAW_DATA_SPREADSHEET_ID';
+}
+
 export function getFormResponseSheetId() {
   return process.env.FORM_RESPONSE_SHEET_ID;
 }
@@ -53,7 +57,7 @@ function getFormResponsesRawData() {
   const DATA_START_ROW = 2;
   const DATA_START_COL = 1;
 
-  const sheet = getSheet(getFormResponseSheetId(), getAdminSpreadsheetId());
+  const sheet = getSheet(getFormResponseSheetId(), getRawDataSpreadsheetId());
   const range = sheet.getDataRange();
   const numRows = range.getNumRows();
   const numCols = range.getNumColumns();
@@ -68,7 +72,7 @@ function getPrepaidRawData() {
   const DATA_START_ROW = 1;
   const DATA_START_COL = 1;
 
-  const sheet = getSheet(getPrepaidRawDataSheetId(), getAdminSpreadsheetId());
+  const sheet = getSheet(getPrepaidRawDataSheetId(), getRawDataSpreadsheetId());
   const range = sheet.getDataRange();
   const numRows = range.getNumRows();
   const numCols = range.getNumColumns();
@@ -84,14 +88,14 @@ function getRolesQuotaRawData() {
   const DATA_START_ROW = 3;
   const DATA_START_COL = 1;
 
-  const sheet = getSheet(getAdminRolesQuotaRawDataSheetId(), getAdminSpreadsheetId());
+  const sheet = getSheet(getAdminRolesQuotaRawDataSheetId(), getRawDataSpreadsheetId());
   const range = sheet.getDataRange();
   const numRows = range.getNumRows();
   const numCols = range.getNumColumns();
   return sheet.getSheetValues(DATA_START_ROW, DATA_START_COL, numRows, numCols);
 }
 
-function getParsedFormResonsesSheet() {
+function getParsedFormResponsesSheet() {
   return getSheet(process.env.PARSED_FORM_RESPONSES_SHEET_ID, getAdminSpreadsheetId());
 }
 
@@ -748,7 +752,7 @@ function convertToRolesRecords(roles) {
 ******************************** */
 
 function writeParsedFormResponsesSheet(responses, roleQuotas) {
-  const sheet = getParsedFormResonsesSheet().clearContents();
+  const sheet = getParsedFormResponsesSheet().clearContents();
   const parsedFormRecords = convertToParsedFormResponses(responses, roleQuotas);
   const headerRecord = [
     ['Role', 'Early names', 'Late names', '', 'Last updated:', Date()],
