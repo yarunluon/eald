@@ -719,11 +719,10 @@ function convertToEaldRecords(prepaids, roles, type) {
 function convertToLateDepartureRecords(prepaidTransactions, names) {
   const nameIndex = 0;
   const emptyRecord = ['', 0, ''];
-  const findNamePredicate = record => record[nameIndex] === name;
 
   const ldRecords = convertToEaldRecords(prepaidTransactions, names, 'late');
   const ldLiteRecords = convertToEaldRecords(prepaidTransactions, names, 'ldLite');
-  
+
   // Build a union of names from both lists
   const allNames = _.map(
     _.unionWith(ldRecords, ldLiteRecords, (a, b) => a[nameIndex] === b[nameIndex]),
@@ -731,7 +730,8 @@ function convertToLateDepartureRecords(prepaidTransactions, names) {
   );
 
   // Build a record that merges both the ldLite and late records
-  const allRecords = allNames.sort().reduce((records, name) => {  
+  const allRecords = allNames.sort().reduce((records, name) => {
+    const findNamePredicate = record => record[nameIndex] === name;
     const [, ldSlots, ...ldRoles] = _.find(ldRecords, findNamePredicate) || emptyRecord;
     const [, ldLiteSlots, ...ldLiteRoles] = _.find(ldLiteRecords, findNamePredicate) || emptyRecord;
 
@@ -869,7 +869,7 @@ function writeLateDeparturePickupSheet(prepaidTransactions, names) {
   const sheet = getLateDepartureSheet().clearContents();
   const lateDepartureRecords = convertToLateDepartureRecords(prepaidTransactions, names);
   const headerRecord = [
-    ['', 'Name', 'Num Lite', 'Num LD', 'Roles ⇒', '', 'Last updated:', Date()],
+    ['', 'Name', 'LD-Lite', 'LD', 'Roles ⇒', '', 'Last updated:', Date()],
   ];
   const dataRecords = lateDepartureRecords.map(record => ['❑', record[0], record[1]].concat(record.slice(2)));
   const records = headerRecord.concat(dataRecords);
