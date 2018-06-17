@@ -400,17 +400,21 @@ export function createNames(roles, omittedRoles = []) {
   Object.keys(_.omit(roles, omittedRoles)).sort().forEach((roleId) => {
     // Add role to each name
     const role = roles[roleId];
+    const getEmptyPasses = () => ({ early: [], late: [], ldLite: [] });
+
+    // Go through every early arrival
     const earlyNames = role.early.names;
     earlyNames.forEach((name) => {
-      names[name] = names[name] || { early: [], late: [] };
+      names[name] = names[name] || getEmptyPasses();
       const earlyRoles = names[name].early;
       earlyRoles.push({ role: role.name, slots: 1 });
       names[name].early = _.uniqBy(earlyRoles, 'role');
     });
 
+    // Go through every late departure
     const lateNames = role.late.names;
     lateNames.forEach((name) => {
-      names[name] = names[name] || { early: [], late: [] };
+      names[name] = names[name] || getEmptyPasses();
       const lateRoles = names[name].late;
       const existingRole = _.find(lateRoles, lateRole => lateRole.role === role.name);
       if (existingRole) {
@@ -419,6 +423,20 @@ export function createNames(roles, omittedRoles = []) {
         lateRoles.push({ role: role.name, slots: 1 });
       }
       names[name].late = _.uniqBy(lateRoles, 'role');
+    });
+
+    // Go through every ld lite
+    const ldLiteNames = role.ldLite.names;
+    ldLiteNames.forEach((name) => {
+      names[name] = names[name] || getEmptyPasses();
+      const ldLiteRoles = names[name].ldLite;
+      const existingRole = _.find(ldLiteRoles, ldLiteRole => ldLiteRole.role === role.name);
+      if (existingRole) {
+        existingRole.slots += 1;
+      } else {
+        ldLiteRoles.push({ role: role.name, slots: 1 });
+      }
+      names[name].ldLite = _.uniqBy(ldLiteRoles, 'role');
     });
   });
 
@@ -628,7 +646,7 @@ function convertToPublicRolesQuotaRecords(roleQuotas) {
 * Reorganizes the prepaids and roles by the specified type
 * @param {Object} prepaids -All the information about all the prepaid transactions
 * @param {Object} roles - ALl the information about roles: early, late, names, etc
-* @param {String} type - Either 'early' or 'late'
+* @param {String} type - Either 'early' or 'late' or 'ldLite'
 * @returns {Array} - A list of all the prepaids and roles by a type (early or late)
 * */
 function convertToEaldRecords(prepaids, roles, type) {
@@ -690,6 +708,42 @@ function convertToEaldRecords(prepaids, roles, type) {
   const sortedRecords = records.sort(sortNames);
 
   return sortedRecords;
+}
+
+/**
+* Generates records that combine both Late Departure and LD-Lite
+* @param {Object} prepaidTransactions -All the information about all the prepaid transactions
+* @param {Object} names - ALl the information about roles: early, late, names, etc
+* @returns {Array} - A list of all the records for Late Departure)
+* */
+function convertToLateDepartureRecords(prepaidTransactions, names) {
+  const nameIndex = 0;
+  const emptyRecord = ['', 0, ''];
+  const findNamePredicate = record => record[nameIndex] === name;
+
+  const ldRecords = convertToEaldRecords(prepaidTransactions, names, 'late');
+  const ldLiteRecords = convertToEaldRecords(prepaidTransactions, names, 'ldLite');
+  
+  // Build a union of names from both lists
+  const allNames = _.map(
+    _.unionWith(ldRecords, ldLiteRecords, (a, b) => a[nameIndex] === b[nameIndex]),
+    record => record[nameIndex],
+  );
+
+  // Build a record that merges both the ldLite and late records
+  const allRecords = allNames.sort().reduce((records, name) => {  
+    const [, ldSlots, ...ldRoles] = _.find(ldRecords, findNamePredicate) || emptyRecord;
+    const [, ldLiteSlots, ...ldLiteRoles] = _.find(ldLiteRecords, findNamePredicate) || emptyRecord;
+
+    // Combine all the ldLite and ld roles. Remove duplicates and empty roles. Then sort.
+    const allRoles = _.compact(_.union(ldRoles, ldLiteRoles)).sort();
+
+    records.push([name, ldLiteSlots, ldSlots, ...allRoles]);
+    return records;
+  }, []);
+
+
+  return allRecords;
 }
 
 function convertToNamesRecords(names) {
@@ -813,9 +867,9 @@ function writeGateCheckSheet(prepaidTransactions, names) {
 
 function writeLateDeparturePickupSheet(prepaidTransactions, names) {
   const sheet = getLateDepartureSheet().clearContents();
-  const lateDepartureRecords = convertToEaldRecords(prepaidTransactions, names, 'late');
+  const lateDepartureRecords = convertToLateDepartureRecords(prepaidTransactions, names);
   const headerRecord = [
-    ['', 'Name', 'Num', 'Roles ⇒', '', 'Last updated:', Date()],
+    ['', 'Name', 'Num Lite', 'Num LD', 'Roles ⇒', '', 'Last updated:', Date()],
   ];
   const dataRecords = lateDepartureRecords.map(record => ['❑', record[0], record[1]].concat(record.slice(2)));
   const records = headerRecord.concat(dataRecords);
