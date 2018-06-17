@@ -21,8 +21,12 @@ export function getPrepaidRawDataSheetId() {
   return process.env.PREPAID_RAWDATA_SHEET_ID;
 }
 
-export function getRolesQuotaRawDataSheetId() {
-  return process.env.ROLES_QUOTA_SHEET_ID;
+export function getAdminRolesQuotaRawDataSheetId() {
+  return process.env.ADMIN_ROLES_QUOTA_SHEET_ID;
+}
+
+export function getPublicRolesQuotaSheetId() {
+  return process.env.PUBLIC_ROLES_QUOTA_SHEET_ID;
 }
 
 /**
@@ -80,7 +84,7 @@ function getRolesQuotaRawData() {
   const DATA_START_ROW = 3;
   const DATA_START_COL = 1;
 
-  const sheet = getSheet(getRolesQuotaRawDataSheetId(), getPublicSpreadsheetId());
+  const sheet = getSheet(getAdminRolesQuotaRawDataSheetId(), getAdminSpreadsheetId());
   const range = sheet.getDataRange();
   const numRows = range.getNumRows();
   const numCols = range.getNumColumns();
@@ -127,6 +131,11 @@ function getBulkStaffTransactionSheet() {
   return getSheet(process.env.BULK_STAFF_TRANSACTION_SHEET_ID, getAdminSpreadsheetId());
 }
 
+export function getPublicRolesQuotaSheet() {
+  return getSheet(process.env.PUBLIC_ROLES_QUOTA_SHEET_ID, getPublicSpreadsheetId());
+}
+
+// Deprecated?
 export function getSkipperSummaryRole() {
   return getSheet(process.env.SKIPPER_SHEET_ID, getSkipperSpreadsheetId());
 }
@@ -315,7 +324,7 @@ export function getRoleQuotas(rawData) {
   }, {});
 
   // Special role
-  allWristbands.fnf = ['fnf', 'FnF', 'FnF', 30, 30, '', ''];
+  allWristbands.fnf = ['fnf', 'FnF', 30, 30, '', ''];
 
   return allWristbands;
 }
@@ -332,7 +341,7 @@ export function getRoleQuotas(rawData) {
 * */
 export function createRole(roleRecord, formRecord) {
   const [timestamp,, rawEarlyNames, rawLateNames, reporter = '', reporterEmail = ''] = formRecord;
-  const [id, formId, name, earlySlots, lateSlots, skipper, ...allEmails] = roleRecord;
+  const [id, name, earlySlots, lateSlots, skipper, ...allEmails] = roleRecord;
 
   const allEarlyNames = splitNames(rawEarlyNames) || [];
   const earlyNames = earlySlots > 0 ? allEarlyNames.slice(0, earlySlots).sort() : [];
@@ -351,7 +360,6 @@ export function createRole(roleRecord, formRecord) {
       slots: earlySlots,
     },
     emails,
-    formId,
     id,
     late: {
       extra: extraLateNames,
@@ -416,14 +424,14 @@ function createRoles(formResponses, roleQuotas) {
   // Cycle through each committee
   _.compact(Object.keys(roleQuotas)).sort().forEach((roleId) => {
     const roleRecord = roleQuotas[roleId];
-    const [id, formId] = roleRecord;
+    const formId = roleId;
     const formRecord = formResponses[formId] || [];
 
     if (!roleRecord) {
       Logger.log('Missing role record: %s', formId);
     }
 
-    roles[id] = createRole(roleRecord, formRecord);
+    roles[roleId] = createRole(roleRecord, formRecord);
   });
 
   return roles;
@@ -590,6 +598,20 @@ function convertToParsedFormResponses(responses, roleQuotas) {
 }
 
 /**
+* Convert the raw form responses in an organized format
+* @param {Object} responses - The latest form response per role keyed on role
+* @param {Object} roleQuotas - The quotas allowed per role keyed on role
+* */
+function convertToPublicRolesQuotaRecords(roleQuotas) {
+  const records = Object.keys(_.omit(roleQuotas, ['fnf'])).sort().map((role) => {
+    const [, roleName, earlySlots, lateSlots] = roleQuotas[role];
+    return [roleName, earlySlots, lateSlots];
+  })
+
+  return records;
+}
+
+/**
 * Reorganizes the prepaids and roles by the specified type
 * @param {Object} prepaids -All the information about all the prepaid transactions
 * @param {Object} roles - ALl the information about roles: early, late, names, etc
@@ -739,6 +761,20 @@ function writeParsedFormResponsesSheet(responses, roleQuotas) {
   });
 }
 
+function writePublicRolesQuotaSheet(roleQuotas) {
+  const sheet = getPublicRolesQuotaSheet().clearContents();
+  const parsedPublicRoleQuotaRecords = convertToPublicRolesQuotaRecords(roleQuotas);
+  const headerRecord = [
+    ['Role', 'Early', 'Late', '', 'Last updated:', Date()],
+  ];
+  const records = headerRecord.concat(parsedPublicRoleQuotaRecords);
+
+  // Add the records to the sheet
+  records.forEach((record) => {
+    sheet.appendRow(record);
+  });
+}
+
 function writeGateCheckSheet(prepaidTransactions, names) {
   const NAME = 0;
   const EALD_NUM = 1;
@@ -881,7 +917,7 @@ export function processFormResponses() {
   const allNames = createNames(roles);
   const prepaidTransactions = getPrepaidTransactions(getPrepaidRawData());
 
-
+  writePublicRolesQuotaSheet(roleQuotas);
   writeParsedFormResponsesSheet(formResponses, roleQuotas);
   writeAuthorizedStaffSheet(roles);
   writeEarlyArrivalSheet(prepaidTransactions, allNames);
