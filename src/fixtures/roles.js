@@ -6,9 +6,13 @@ export const ROLES = {
       slots: 1,
     },
     emails: ['nella@gmail.com'],
-    formId: 'eald',
     id: 'eald',
     late: {
+      extra: [],
+      names: ['Nute the Barber', 'Norbert Vance'],
+      slots: 2,
+    },
+    'ld-lite': {
       extra: [],
       names: ['Nute the Barber', 'Norbert Vance'],
       slots: 2,
@@ -26,11 +30,15 @@ export const ROLES = {
       slots: 2,
     },
     emails: ['obara.sand@gmail.com'],
-    formId: 'eald',
     id: 'eald',
     late: {
       extra: [],
       names: ['Norbert Vance', 'Norbert Vance'],
+      slots: 2,
+    },
+    'ld-lite': {
+      extra: [],
+      names: ['Nute the Barber', 'Norbert Vance'],
       slots: 2,
     },
     name: 'Altars',

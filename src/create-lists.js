@@ -328,7 +328,7 @@ export function getRoleQuotas(rawData) {
   }, {});
 
   // Special role
-  allWristbands.fnf = ['fnf', 'FnF', 30, 30, '', ''];
+  allWristbands.fnf = ['fnf', 'FnF', 30, 30, 30, '', ''];
 
   return allWristbands;
 }
@@ -345,7 +345,7 @@ export function getRoleQuotas(rawData) {
 * */
 export function createRole(roleRecord, formRecord) {
   const [timestamp,, rawEarlyNames, rawLateNames, reporter = '', reporterEmail = ''] = formRecord;
-  const [id, name, earlySlots, lateSlots, skipper, ...allEmails] = roleRecord;
+  const [id, name, earlySlots, lateSlots, ldLiteSlots, skipper, ...allEmails] = roleRecord;
 
   const allEarlyNames = splitNames(rawEarlyNames) || [];
   const earlyNames = earlySlots > 0 ? allEarlyNames.slice(0, earlySlots).sort() : [];
@@ -369,6 +369,11 @@ export function createRole(roleRecord, formRecord) {
       extra: extraLateNames,
       names: lateNames,
       slots: lateSlots,
+    },
+    ldLite: {
+      extra: [],
+      names: [],
+      slots: ldLiteSlots,
     },
     name,
     reporter,
