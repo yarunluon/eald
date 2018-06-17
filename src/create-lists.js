@@ -613,8 +613,8 @@ function convertToParsedFormResponses(responses, roleQuotas) {
 * */
 function convertToPublicRolesQuotaRecords(roleQuotas) {
   const records = Object.keys(_.omit(roleQuotas, ['fnf'])).sort().map((role) => {
-    const [, roleName, earlySlots, lateSlots] = roleQuotas[role];
-    return [roleName, earlySlots, lateSlots];
+    const [, roleName, earlySlots, lateSlots, ldLiteSlots] = roleQuotas[role];
+    return [roleName, earlySlots, lateSlots, ldLiteSlots];
   });
 
   return records;
@@ -774,7 +774,7 @@ function writePublicRolesQuotaSheet(roleQuotas) {
   const sheet = getPublicRolesQuotaSheet().clearContents();
   const parsedPublicRoleQuotaRecords = convertToPublicRolesQuotaRecords(roleQuotas);
   const headerRecord = [
-    ['Role', 'Early', 'Late', '', 'Last updated:', Date()],
+    ['Role', 'Early', 'Late', 'LD-Lite', '', 'Last updated:', Date()],
   ];
   const records = headerRecord.concat(parsedPublicRoleQuotaRecords);
 
