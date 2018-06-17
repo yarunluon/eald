@@ -428,7 +428,7 @@ function createRoles(formResponses, roleQuotas) {
   // Cycle through each committee
   _.compact(Object.keys(roleQuotas)).sort().forEach((roleId) => {
     const roleRecord = roleQuotas[roleId];
-    const formId = roleId;
+    const [, formId] = roleRecord;
     const formRecord = formResponses[formId] || [];
 
     if (!roleRecord) {
