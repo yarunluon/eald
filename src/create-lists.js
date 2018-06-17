@@ -610,7 +610,7 @@ function convertToPublicRolesQuotaRecords(roleQuotas) {
   const records = Object.keys(_.omit(roleQuotas, ['fnf'])).sort().map((role) => {
     const [, roleName, earlySlots, lateSlots] = roleQuotas[role];
     return [roleName, earlySlots, lateSlots];
-  })
+  });
 
   return records;
 }
