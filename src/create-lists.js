@@ -22,7 +22,7 @@ export function getPrepaidRawDataSheetId() {
 }
 
 export function getRolesQuotaRawDataSheetId() {
-  return process.env.ROLES_QUOTA_SHEET_ID;
+  return process.env.PUBLIC_ROLES_QUOTA_SHEET_ID;
 }
 
 /**

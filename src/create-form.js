@@ -7,11 +7,11 @@ function getForm() {
 }
 
 /**
-* Gets the public facing spreadsheet
+* Gets the admin facing spreadsheet
 * @returns {Spreadsheet} Google Spreadsheet
 * */
-function getPublicSheet() {
-  return SpreadsheetApp.openById('process.env.PUBLIC_SPREADSHEET_ID');
+function getAdminSheet() {
+  return SpreadsheetApp.openById('process.env.ADMIN_SPREADSHEET_ID');
 }
 
 /**
@@ -19,8 +19,8 @@ function getPublicSheet() {
 * @returns {Sheet} Google sheet summarizing the wristbands by role
 * */
 function getWristbandsByRole() {
-  const id = +'process.env.ROLES_QUOTA_SHEET_ID';
-  const spreadsheet = getPublicSheet();
+  const id = +'process.env.ADMIN_ROLES_QUOTA_SHEET_ID';
+  const spreadsheet = getAdminSheet();
   return _.filter(spreadsheet.getSheets(), sheet => sheet.getSheetId() === id)[0];
 }
 
@@ -79,8 +79,8 @@ function createStatelessForm(form, sheet) {
 
   const allRoles = _.times((numRows + 1) - DATA_FIRST_ROW, (num) => {
     const index = num + DATA_FIRST_ROW;
-    const [,, role] = getRecordValues(sheet, index, numColumns);
-    return role;
+    const [, roleId] = getRecordValues(sheet, index, numColumns);
+    return roleId;
   }).concat('FnF').sort();
 
   const roleChoices = _.map(allRoles, role => selectRoleListItem.createChoice(role));

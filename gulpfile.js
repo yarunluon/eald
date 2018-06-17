@@ -19,7 +19,8 @@ gulp.task('default', () => {
     // Sheet ids
     .pipe(replace('process.env.FORM_RESPONSE_SHEET_ID', process.env.FORM_RESPONSE_SHEET_ID))
     .pipe(replace('process.env.PREPAID_RAWDATA_SHEET_ID', process.env.PREPAID_RAWDATA_SHEET_ID))
-    .pipe(replace('process.env.ROLES_QUOTA_SHEET_ID', process.env.ROLES_QUOTA_SHEET_ID))
+    .pipe(replace('process.env.PUBLIC_ROLES_QUOTA_SHEET_ID', process.env.PUBLIC_ROLES_QUOTA_SHEET_ID))
+    .pipe(replace('process.env.ADMIN_ROLES_QUOTA_SHEET_ID', process.env.ADMIN_ROLES_QUOTA_SHEET_ID))
     .pipe(replace('process.env.PARSED_FORM_RESPONSES_SHEET_ID', process.env.PARSED_FORM_RESPONSES_SHEET_ID))
     .pipe(replace('process.env.ROLES_SHEET_ID', process.env.ROLES_SHEET_ID))
     .pipe(replace('process.env.NAMES_SHEET_ID', process.env.NAMES_SHEET_ID))
@@ -43,6 +44,7 @@ gulp.task('default', () => {
     .pipe(gulp.dest('dist'));
 });
 
+/*
 // Need to build the test files to test environment variables (maybe a bad idea?)
 gulp.task('test-build', () => {
   gulp.src(['src/*.js', '!src/*.test.js', '!src/*-mocks.js', '!src/vendor/**'])
@@ -55,7 +57,8 @@ gulp.task('test-build', () => {
     // Sheet ids
     .pipe(replace('process.env.FORM_RESPONSE_SHEET_ID', process.env.FORM_RESPONSE_SHEET_ID))
     .pipe(replace('process.env.PREPAID_RAWDATA_SHEET_ID', process.env.PREPAID_RAWDATA_SHEET_ID))
-    .pipe(replace('process.env.ROLES_QUOTA_SHEET_ID', process.env.ROLES_QUOTA_SHEET_ID))
+    .pipe(replace('process.env.PUBLIC_ROLES_QUOTA_SHEET_ID', process.env.PUBLIC_ROLES_QUOTA_SHEET_ID))
+    .pipe(replace('process.env.ADMIN_ROLES_QUOTA_SHEET_ID', process.env.ADMIN_ROLES_QUOTA_SHEET_ID))
     .pipe(replace('process.env.PARSED_FORM_RESPONSES_SHEET_ID', process.env.PARSED_FORM_RESPONSES_SHEET_ID))
     .pipe(replace('process.env.ROLES_SHEET_ID', process.env.ROLES_SHEET_ID))
     .pipe(replace('process.env.NAMES_SHEET_ID', process.env.NAMES_SHEET_ID))
@@ -70,4 +73,5 @@ gulp.task('test-build', () => {
 
     .pipe(gulp.dest('dist-test'));
 });
+*/
 
