@@ -1052,22 +1052,31 @@ const templates = {
 };
 
 function getQuotaHtmlBody(quota) {
-  const [,, name, earlySlots, lateSlots, skipper] = quota;
+  const [, name, earlySlots, ldLiteSlots, lateSlots, skipper] = quota;
 
   const NEWLINE = '<p />';
   const preamble = templates.greeting + NEWLINE;
 
-  const eaPasses = (parseInt(earlySlots, 10) || 0) === 1 ? 'pass' : 'passes';
-  const ldPasses = (parseInt(lateSlots, 10) || 0) === 1 ? 'pass' : 'passes';
+  const nPasses = slots => (parseInt(slots, 10) || 0) === 1 ? 'pass' : 'passes';
+  const eaPasses = nPasses(earlySlots);
+  const ldPasses = nPasses(lateSlots);
+  const ldLitePasses = nPasses(ldLiteSlots);
+
+  const ldLiteCopy = (parseInt(ldLiteSlots, 10) || 0)
+    ? `Oh wait, there's more. You also have <b>${ldLiteSlots} LD-Lite ${ldLitePasses}</b>! `
+    : '';
+
   const coordArticle = /[aeiou]/.test((name || '')[0].toLowerCase()) ? 'an' : 'a';
   const body =
-    `You have <b>${earlySlots} Early Arrival ${eaPasses} </b> and <b>${lateSlots} Late Departure ${ldPasses}</b>. ` +
+    `You have <b>${earlySlots} EA-crew ${eaPasses} </b> and <b>${lateSlots} Late Departure ${ldPasses}</b>. ` +
+    ldLiteCopy +
     `There is no need to purchase these passes. They are given to you as part of being ${coordArticle} ${name} Coordinator. ` +
     '<p />' +
-    'At your earliest convenience, could you send me the list of names for these passes? ' +
-    'For LD passes, as a Coordinator, you can pick them all up and hand them out to your volunteers (Highly recommended). Let me know.' +
+    'Please send me the names I should be giving these passes to. ' +
+    'For LD passes, you can take all the LD passes as a coordinator and hand them out yourself. Highly recommended and a good power trip, because the volunteers who show up for their shift get a pass. In either case, let me know what you want to do. ' +
     '<p />' +
-    `If you need more passes, please contact your skipper, ${skipper}, and CC me. ` +
+    'As a Coordinator, you do not automatically get an EA/LD pass. If you want to come Early Arrival or Late Departure, you need to use one of your comped passes. ' + 
+    `If you need more comped passes, please contact your skipper, ${skipper}, and CC me. ` +
     'For any other questions, respond back to this email.' +
     '<p />' +
     'Happy planning!' +
@@ -1082,16 +1091,16 @@ function getQuotaHtmlBody(quota) {
 }
 
 function getQuotaEmailParams(quota) {
-  // const [, , name] = quota;
-  const [, , name, , , , ...allEmails] = quota;
+  const [, name, , , , , ...allEmails] = quota;
 
-  const subject = `[EA/LD] Your EA/LD passes for ${name}`;
+  const subject = `[EA/LD] Your comped EA/LD passes for ${name}`;
   const toEmails = _.compact(allEmails);
   const htmlBody = getQuotaHtmlBody(quota);
-  const uniqueToEmails = _.union([], toEmails).join(',');
+  const uniqueToEmails = _.union(['yarunl@gmail.com'], toEmails).join(',');
 
   return {
-    to: uniqueToEmails,
+    // to: uniqueToEmails,
+    to: 'yarunl@gmail.com',
     name: 'EA/LD Passes',
     subject,
     htmlBody,
@@ -1113,45 +1122,59 @@ export function sendQuotaEmail() {
     'fnf',
     '',
 
-    // First batch of emails
-    'altars',
-    'artandartfunding',
-    'artgrantartists',
-    'cafebruxia',
-    'carcamping',
-    'chilllounge',
-    'chilloutplatform',
-    'eald',
-    'externalkitchen',
-    'food-earlystaff',
-    'gate',
-    'hydration',
-    'lighting',
-    'mildew',
-    'milf',
-    'mold',
-    'morninglibations',
-    'parking',
-    'power',
-    'recording',
-    'schpank',
-    'signs,info',
-    'shade',
-    'shuttleteam',
-    'sitecoordinators',
+    // Already requested
+    'shuttles',
     'skippers',
-    'sound,main',
-    'sound,pool',
-    'transportation',
+    'artgrantartists',
   ];
 
   const whitelist = [
+    'altars',
+    'artandartfunding',
+    'availablehands',
+    'cabinsandlodging',
+    'cafebruxia',
+    'carcamping',
+    'chilllounge',
+    'cleanup',
+    'communications',
+    'dancefloorchilloutplatform',
+    'djbooth',
+    'djsigns',
+    'eald',
+    'externalkitchen',
+    'food-coordinators',
+    'food-mealleads',
+    'gate',
+    'hydration',
+    'information',
+    'karmapatrol',
+    'lighting',
+    'lostandfound',
+    'mainsound',
+    'medical',
+    'mildew',
+    'mist',
+    'mold',
+    'morninglibations',
+    'musiccommittee',
+    'parking',
+    'pooldecorations',
+    'poolsidesound',
+    'power',
+    'recording',
+    'schpank',
+    'shade',
+    'signs',
+    'sitecoordinators',
+    'transportation',
   ];
 
   const pickedRoleQuotas = _.pick(roleQuotas, whitelist);
   _.forEach(_.omit(pickedRoleQuotas, blacklist), (quota) => {
     const emailParams = getQuotaEmailParams(quota);
     Logger.log(emailParams);
+    // Always leave this commented as a safety. Uncomment in production.
     // MailApp.sendEmail(emailParams);
   });
 }
@@ -1171,7 +1194,7 @@ function getPrepaidHtmlBody(prepaid) {
     If this is not true, let me know.
     <p />
     ${early ? 'EA passes are picked up at the Gate. If you bought multiple passes for other people, have them mention your name at the Gate. ' : ''}
-    ${late ? 'LD passes are picked up in the Main Lodge on Sunday between 12pm to 4pm.' : ''}
+    ${late ? 'LD passes are picked up by the pool on Sunday between 12pm to 4pm.' : ''}
     <p />
     Happy dancing!
     <br />
