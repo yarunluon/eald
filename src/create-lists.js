@@ -264,7 +264,7 @@ export function bothNames(prepaidNames, roleNames) {
 * */
 export function getPrepaidTransactions(rawData) {
   const uniquePrepaids = rawData.reduce((prepaids, record) => {
-    const [name, email, tid, early, late, timestamp] = record;
+    const [name, email, tid, early, late, timestamp, status, note] = record;
     const recordObj = {
       timestamp,
       tid,
@@ -272,6 +272,8 @@ export function getPrepaidTransactions(rawData) {
       early,
       late,
       email,
+      status,
+      note
     };
     return Object.assign({}, prepaids, { [tid]: recordObj });
   }, {});
@@ -345,7 +347,7 @@ export function getRoleQuotas(rawData) {
 * */
 export function createRole(roleRecord, formRecord) {
   const [timestamp,, rawEarlyNames, rawLateNames, rawLdLiteNames, reporter = '', reporterEmail = ''] = formRecord;
-  const [id, name, earlySlots, lateSlots, ldLiteSlots, skipper, ...allEmails] = roleRecord;
+  const [id, name, earlySlots, ldLiteSlots, lateSlots, skipper, ...allEmails] = roleRecord;
 
   const allEarlyNames = splitNames(rawEarlyNames) || [];
   const earlyNames = earlySlots > 0 ? allEarlyNames.slice(0, earlySlots).sort() : [];
@@ -590,6 +592,17 @@ function mergeNames(namesOriginal) {
 * Converters
 ******************************** */
 
+function getPassLabel(passType) {
+  const passLabels = {
+    early: 'EA-Crew',
+    late: 'Late',
+    prepaid: 'Guest',
+    authorized: 'Crew',
+  }
+
+  return passLabels[passType] || 'Unknown';
+}
+
 function getNamesRecords(allNames, type) {
   const records = [];
 
@@ -597,7 +610,7 @@ function getNamesRecords(allNames, type) {
 
   Object.keys(names).forEach((name) => {
     const roles = _.reduce(allNames[name][type], addRole, { roles: [], slots: 0 });
-    const record = [name, _.upperFirst(type), type === 'early' ? 1 : roles.slots].concat(roles.roles.sort());
+    const record = [name, getPassLabel(type), type === 'early' ? 1 : roles.slots].concat(roles.roles.sort());
     records.push(record);
   });
 
@@ -635,8 +648,8 @@ function convertToParsedFormResponses(responses, roleQuotas) {
 * */
 function convertToPublicRolesQuotaRecords(roleQuotas) {
   const records = Object.keys(_.omit(roleQuotas, ['fnf'])).sort().map((role) => {
-    const [, roleName, earlySlots, lateSlots, ldLiteSlots] = roleQuotas[role];
-    return [roleName, earlySlots, lateSlots, ldLiteSlots];
+    const [, roleName, earlySlots, ldLiteSlots, lateSlots] = roleQuotas[role];
+    return [roleName, earlySlots, ldLiteSlots, lateSlots];
   });
 
   return records;
@@ -804,8 +817,8 @@ function convertToRolesRecords(roles) {
 
   roleIds.forEach((roleId) => {
     const role = roles[roleId];
-    roleRecords = roleRecords.concat(createRoleRecords(role.name, role.early.slots, role.early.names, 'Early'));
-    roleRecords = roleRecords.concat(createRoleRecords(role.name, role.late.slots, role.late.names, 'Late'));
+    roleRecords = roleRecords.concat(createRoleRecords(role.name, role.early.slots, role.early.names, getPassLabel('early')));
+    roleRecords = roleRecords.concat(createRoleRecords(role.name, role.late.slots, role.late.names, getPassLabel('late')));
   });
   return roleRecords;
 }
@@ -832,7 +845,7 @@ function writePublicRolesQuotaSheet(roleQuotas) {
   const sheet = getPublicRolesQuotaSheet().clearContents();
   const parsedPublicRoleQuotaRecords = convertToPublicRolesQuotaRecords(roleQuotas);
   const headerRecord = [
-    ['Role', 'Early', 'Late', 'LD-Lite', '', 'Last updated:', Date()],
+    ['Role', getPassLabel('early'), 'LD-Lite', 'Late', '', 'Last updated:', Date()],
   ];
   const records = headerRecord.concat(parsedPublicRoleQuotaRecords);
 
@@ -852,7 +865,13 @@ function writeGateCheckSheet(prepaidTransactions, names) {
     ['Name', 'Num', 'Type', '', 'Last updated:', Date()],
   ];
   const dataRecords = earlyArrivalRecords.map((record) => {
-    const roles = record.slice(EALD_TYPE).map(role => (role === 'Prepaid' ? role : 'Authorized'));
+    const roles = record
+      .slice(EALD_TYPE)
+      .map(role => (
+        role === 'Prepaid' 
+          ? getPassLabel(role.toLowerCase()) 
+          : getPassLabel('authorized')
+      ));
     // Array.fill does not work in GAS and there is no babel polyfill for it
     const checkboxes = _.times(record[EALD_NUM], () => '❑');
     const uniqueRoles = _.uniq(roles);
@@ -1096,7 +1115,7 @@ function getQuotaEmailParams(quota) {
   const subject = `[EA/LD] Your comped EA/LD passes for ${name}`;
   const toEmails = _.compact(allEmails);
   const htmlBody = getQuotaHtmlBody(quota);
-  const uniqueToEmails = _.union(['yarunl@gmail.com'], toEmails).join(',');
+  const uniqueToEmails = _.union([], toEmails).join(',');
 
   return {
     // to: uniqueToEmails,
@@ -1123,6 +1142,9 @@ export function sendQuotaEmail() {
     '',
 
     // Already requested
+    'carcamping',
+    'cleanup',
+    'mist',
     'shuttles',
     'skippers',
     'artgrantartists',
@@ -1134,9 +1156,7 @@ export function sendQuotaEmail() {
     'availablehands',
     'cabinsandlodging',
     'cafebruxia',
-    'carcamping',
     'chilllounge',
-    'cleanup',
     'communications',
     'dancefloorchilloutplatform',
     'djbooth',
@@ -1154,7 +1174,6 @@ export function sendQuotaEmail() {
     'mainsound',
     'medical',
     'mildew',
-    'mist',
     'mold',
     'morninglibations',
     'musiccommittee',
@@ -1184,17 +1203,18 @@ function getPrepaidHtmlBody(prepaid) {
 
   const firstName = name.split(' ')[0] || '';
 
-  const preamble = `Hey ${firstName}, <p />`;
+  const preamble = `Greetings ${firstName}, <p />`;
 
   const eaPasses = (parseInt(early, 10) || 0) === 1 ? 'pass' : 'passes';
   const ldPasses = (parseInt(late, 10) || 0) === 1 ? 'pass' : 'passes';
 
   const body =
     `I'm the Early Arrival / Late Depature (EA/LD) coordinator. I'm confirming you bought <b>${early} Early Arrival ${eaPasses} </b> and <b>${late} Late Departure ${ldPasses}</b>.
-    If this is not true, let me know.
     <p />
     ${early ? 'EA passes are picked up at the Gate. If you bought multiple passes for other people, have them mention your name at the Gate. ' : ''}
     ${late ? 'LD passes are picked up by the pool on Sunday between 12pm to 4pm.' : ''}
+    <p />
+    Please remember to feed yourself during Early Arrival or Late Departure. Any meals that are served are meant for essential staff who are setting up the party or tearing it down.
     <p />
     Happy dancing!
     <br />
@@ -1206,12 +1226,13 @@ function getPrepaidHtmlBody(prepaid) {
 }
 /*
 * [name]: {
-*   timestamp: number
-*   tid: string
-*   name: string
-*   early: number
-*   late: number
-*   email: string
+*   timestamp: number,
+*   tid: string,
+*   name: string,
+*   early: number,
+*   late: number,
+*   email: string,
+*   status: string 
 * }
 */
 function getPrepaidEmailParams(prepaid) {
@@ -1223,7 +1244,8 @@ function getPrepaidEmailParams(prepaid) {
   const uniqueToEmails = _.union([], [email]).join(',');
 
   return {
-    to: uniqueToEmails,
+    // to: uniqueToEmails,
+    to: 'yarunl@gmail.com',
     name: 'EA/LD Passes',
     subject,
     htmlBody,
@@ -1234,9 +1256,16 @@ export function sendPrepaidEmail() {
   const prepaids = getPrepaidTransactions(getPrepaidRawData());
 
   const blacklist = [''];
-  _.forEach(_.omit(prepaids, blacklist), (prepaid) => {
+  const safePrepaids = _.omit(prepaids, blacklist);
+  const uncontactedPrepaids = _.filter(
+    safePrepaids, 
+    (safePrepaid) => safePrepaid.status != 'emailed',
+  );
+
+  _.forEach(uncontactedPrepaids, (prepaid) => {
     const emailParams = getPrepaidEmailParams(prepaid);
     Logger.log(emailParams);
+    // Disabled on purpose to prevent accidental sending
     // MailApp.sendEmail(emailParams);
   });
 }
