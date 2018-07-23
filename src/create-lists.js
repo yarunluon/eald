@@ -17,6 +17,10 @@ export function getRawDataSpreadsheetId() {
   return 'process.env.RAW_DATA_SPREADSHEET_ID';
 }
 
+export function getGateCheckSpreadsheetId() {
+  return 'process.env.GATE_CHECK_SPREADSHEET_ID';
+}
+
 export function getFormResponseSheetId() {
   return process.env.FORM_RESPONSE_SHEET_ID;
 }
@@ -112,7 +116,7 @@ function getPrepaidSheet() {
 }
 
 function getGateCheckSheet() {
-  return getSheet(process.env.GATE_CHECK_SHEET_ID, getAdminSpreadsheetId());
+  return getSheet(process.env.GATE_CHECK_SHEET_ID, getGateCheckSpreadsheetId());
 }
 
 function getLateDepartureSheet() {
@@ -596,8 +600,8 @@ function getPassLabel(passType) {
   const passLabels = {
     early: 'EA-Crew',
     late: 'Late',
-    prepaid: 'Guest',
-    authorized: 'Crew',
+    prepaid: 'Green',
+    authorized: 'Purple',
   }
 
   return passLabels[passType] || 'Unknown';
@@ -884,6 +888,57 @@ function writeGateCheckSheet(prepaidTransactions, names) {
   });
 }
 
+function writeGateCheckCrewGuestSheet(prepaidTransactions, names) {
+  const COL_NAME = 0;
+  const COL_EALD_NUM = 1;
+  const COL_EALD_TYPE = 2;
+  const sheet = getGateCheckSheet().clearContents();
+  const earlyArrivalRecords = convertToEaldRecords(prepaidTransactions, names, 'early');
+  const headerRecord = [
+    ['Name', 'FnF', 'EA-Crew', 'EA-Guest =>', '', 'Last updated:', Date()],
+  ];
+  const dataRecords = earlyArrivalRecords.map((record) => {
+    Logger.log(record);
+    const roles = record
+      .slice(COL_EALD_TYPE)
+      .map(role => (
+        role === 'Prepaid' 
+          ? getPassLabel(role.toLowerCase()) 
+          : getPassLabel('authorized')
+      ));
+    // Array.fill does not work in GAS and there is no babel polyfill for it
+
+    const wristbandsCount = roles.reduce(
+      (accum, role) => {
+        const newAccum = { ...accum };
+        newAccum[role] = (newAccum[role] || 0) + 1;
+        return newAccum;
+      }
+    , {});
+
+    const authorizedPass = wristbandsCount[getPassLabel('authorized')]
+      ? getPassLabel('authorized')
+      : '';
+    
+    const guestPasses = _.times(
+      record[COL_EALD_NUM] - (authorizedPass ? 1 : 0), 
+      () => getPassLabel('prepaid')
+    );
+
+    return [
+      record[COL_NAME], 
+      'Ticket',
+      authorizedPass
+    ].concat(guestPasses);
+  });
+  
+  const records = headerRecord.concat(dataRecords);
+
+  records.forEach((record) => {
+    sheet.appendRow(record);
+  });
+}
+
 function writeLateDeparturePickupSheet(prepaidTransactions, names) {
   const sheet = getLateDepartureSheet().clearContents();
   const lateDepartureRecords = convertToLateDepartureRecords(prepaidTransactions, names);
@@ -1003,15 +1058,16 @@ export function processFormResponses() {
   const allNames = createNames(roles);
   const prepaidTransactions = getPrepaidTransactions(getPrepaidRawData());
 
-  writePublicRolesQuotaSheet(roleQuotas);
-  writeParsedFormResponsesSheet(formResponses, roleQuotas);
-  writeAuthorizedStaffSheet(roles);
-  writeEarlyArrivalSheet(prepaidTransactions, allNames);
-  writeLateDepartureSheet(prepaidTransactions, allNames);
-  writeStaffSheet(createNames(roles, ['fnf']));
-  writeGateCheckSheet(prepaidTransactions, allNames);
-  writeLateDeparturePickupSheet(prepaidTransactions, allNames);
-  writeRolesSheet(prepaidTransactions, roles);
+  // writePublicRolesQuotaSheet(roleQuotas);
+  // writeParsedFormResponsesSheet(formResponses, roleQuotas);
+  // writeAuthorizedStaffSheet(roles);
+  // writeEarlyArrivalSheet(prepaidTransactions, allNames);
+  // writeLateDepartureSheet(prepaidTransactions, allNames);
+  // writeStaffSheet(createNames(roles, ['fnf']));
+  // writeGateCheckSheet(prepaidTransactions, allNames);
+  writeGateCheckCrewGuestSheet(prepaidTransactions, allNames);
+  // writeLateDeparturePickupSheet(prepaidTransactions, allNames);
+  // writeRolesSheet(prepaidTransactions, roles);
 }
 
 export function processPrepaidResponses() {
@@ -1022,7 +1078,8 @@ export function processPrepaidResponses() {
   const prepaidTransactions = getPrepaidTransactions(getPrepaidRawData());
 
   writePrepaidSheet(prepaidTransactions);
-  writeGateCheckSheet(prepaidTransactions, allNames);
+  // writeGateCheckSheet(prepaidTransactions, allNames);
+  writeGateCheckCrewGuestSheet(prepaidTransactions, allNames);
   writeLateDeparturePickupSheet(prepaidTransactions, allNames);
   writeEarlyArrivalSheet(prepaidTransactions, allNames);
   writeLateDepartureSheet(prepaidTransactions, allNames);

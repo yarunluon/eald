@@ -13,6 +13,7 @@ gulp.task('default', () => {
     // Expand dotenv variables to their actual values
     .pipe(replace('process.env.ADMIN_SPREADSHEET_ID', process.env.ADMIN_SPREADSHEET_ID))
     .pipe(replace('process.env.FORM_ID', process.env.FORM_ID))
+    .pipe(replace('process.env.GATE_CHECK_SPREADSHEET_ID', process.env.GATE_CHECK_SPREADSHEET_ID))
     .pipe(replace('process.env.PUBLIC_SPREADSHEET_ID', process.env.PUBLIC_SPREADSHEET_ID))
     .pipe(replace('process.env.RAW_DATA_SPREADSHEET_ID', process.env.RAW_DATA_SPREADSHEET_ID))
     .pipe(replace('process.env.SKIPPER_SPREADSHEET_ID', process.env.SKIPPER_SPREADSHEET_ID))
