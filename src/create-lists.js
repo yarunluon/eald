@@ -1058,16 +1058,16 @@ export function processFormResponses() {
   const allNames = createNames(roles);
   const prepaidTransactions = getPrepaidTransactions(getPrepaidRawData());
 
-  // writePublicRolesQuotaSheet(roleQuotas);
-  // writeParsedFormResponsesSheet(formResponses, roleQuotas);
-  // writeAuthorizedStaffSheet(roles);
-  // writeEarlyArrivalSheet(prepaidTransactions, allNames);
-  // writeLateDepartureSheet(prepaidTransactions, allNames);
-  // writeStaffSheet(createNames(roles, ['fnf']));
-  // writeGateCheckSheet(prepaidTransactions, allNames);
+  writePublicRolesQuotaSheet(roleQuotas);
+  writeParsedFormResponsesSheet(formResponses, roleQuotas);
+  writeAuthorizedStaffSheet(roles);
+  writeEarlyArrivalSheet(prepaidTransactions, allNames);
+  writeLateDepartureSheet(prepaidTransactions, allNames);
+  writeStaffSheet(createNames(roles, ['fnf']));
+  writeGateCheckSheet(prepaidTransactions, allNames);
   writeGateCheckCrewGuestSheet(prepaidTransactions, allNames);
-  // writeLateDeparturePickupSheet(prepaidTransactions, allNames);
-  // writeRolesSheet(prepaidTransactions, roles);
+  writeLateDeparturePickupSheet(prepaidTransactions, allNames);
+  writeRolesSheet(prepaidTransactions, roles);
 }
 
 export function processPrepaidResponses() {
@@ -1078,7 +1078,7 @@ export function processPrepaidResponses() {
   const prepaidTransactions = getPrepaidTransactions(getPrepaidRawData());
 
   writePrepaidSheet(prepaidTransactions);
-  // writeGateCheckSheet(prepaidTransactions, allNames);
+  writeGateCheckSheet(prepaidTransactions, allNames);
   writeGateCheckCrewGuestSheet(prepaidTransactions, allNames);
   writeLateDeparturePickupSheet(prepaidTransactions, allNames);
   writeEarlyArrivalSheet(prepaidTransactions, allNames);
