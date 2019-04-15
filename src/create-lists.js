@@ -18,19 +18,19 @@ export function getRawDataSpreadsheetId() {
 }
 
 export function getGateCheckSpreadsheetId() {
-  return 'process.env.GATE_CHECK_SPREADSHEET_ID';
+  return 'process.env.GATE_SPREADSHEET_ID';
 }
 
 export function getFormResponseSheetId() {
-  return process.env.FORM_RESPONSE_SHEET_ID;
+  return process.env.RAW_FORM_RESPONSE_SHEET_ID;
 }
 
 export function getPrepaidRawDataSheetId() {
-  return process.env.PREPAID_RAWDATA_SHEET_ID;
+  return process.env.RAW_PREPAID_TRANSACTIONS_SHEET_ID;
 }
 
 export function getAdminRolesQuotaRawDataSheetId() {
-  return process.env.ADMIN_ROLES_QUOTA_SHEET_ID;
+  return process.env.RAW_ROLES_QUOTA;
 }
 
 export function getPublicRolesQuotaSheetId() {
@@ -100,27 +100,27 @@ function getRolesQuotaRawData() {
 }
 
 function getParsedFormResponsesSheet() {
-  return getSheet(process.env.PARSED_FORM_RESPONSES_SHEET_ID, getAdminSpreadsheetId());
+  return getSheet(process.env.ADMIN_PARSED_FORM_RESPONSES_SHEET_ID, getAdminSpreadsheetId());
 }
 
 function getRolesSheet() {
-  return getSheet(process.env.ROLES_SHEET_ID, getAdminSpreadsheetId());
+  return getSheet(process.env.ADMIN_ALL_PASSES_SHEET_ID, getAdminSpreadsheetId());
 }
 
 function getNamesSheet() {
-  return getSheet(process.env.NAMES_SHEET_ID, getAdminSpreadsheetId());
+  return getSheet(process.env.ADMIN_STAFF_LIST_SHEET_ID, getAdminSpreadsheetId());
 }
 
 function getPrepaidSheet() {
-  return getSheet(process.env.PREPAID_SHEET_ID, getAdminSpreadsheetId());
+  return getSheet(process.env.ADMIN_PREPAID_SHEET_ID, getAdminSpreadsheetId());
 }
 
 function getGateCheckSheet() {
-  return getSheet(process.env.GATE_CHECK_SHEET_ID, getGateCheckSpreadsheetId());
+  return getSheet(process.env.GATE_GATECHECK_SHEET_ID, getGateCheckSpreadsheetId());
 }
 
 function getLateDepartureSheet() {
-  return getSheet(process.env.LATE_DEPARTURES_SHEET_ID, getAdminSpreadsheetId());
+  return getSheet(process.env.ADMIN_LATE_DEPARTURES_SHEET_ID, getAdminSpreadsheetId());
 }
 
 function getPublicEarlyArrivalSheet() {
@@ -132,7 +132,7 @@ function getPublicLateDepartureSheet() {
 }
 
 function getAuthorizedStaffSheet() {
-  return getSheet(process.env.AUTHORIZED_STAFF_SHEET_ID, getPublicSpreadsheetId());
+  return getSheet(process.env.PUBLIC_AUTHORIZED_STAFF_SHEET_ID, getPublicSpreadsheetId());
 }
 
 function getBulkStaffTransactionSheet() {

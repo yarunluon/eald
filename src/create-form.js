@@ -19,7 +19,7 @@ function getRawDataSheet() {
 * @returns {Sheet} Google sheet summarizing the wristbands by role
 * */
 function getWristbandsByRole() {
-  const id = +'process.env.ADMIN_ROLES_QUOTA_SHEET_ID';
+  const id = +'process.env.RAW_ROLES_QUOTA';
   const spreadsheet = getRawDataSheet();
   return _.filter(spreadsheet.getSheets(), sheet => sheet.getSheetId() === id)[0];
 }
