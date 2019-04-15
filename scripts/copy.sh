@@ -1,4 +1,6 @@
 #!/bin/bash
 # Copy files to another project
 
-cp dist/* ../eald-gas/scripts/
+cp dist/* ../eald-gas/thump
+
+
