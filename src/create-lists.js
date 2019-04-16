@@ -194,14 +194,15 @@ export function splitNames(names) {
     nameParts = parseableNames.split(',');
   }
 
-  const prettyNames = nameParts.map(fullname =>
-    // Separate by name parts
-    String(fullname).trim().split(' ').map(name =>
-      // Capitalize first letter
-      name.slice(0, 1).toUpperCase() + name.slice(1))
-    // Recombine name parts
-      .join(' '));
+  // Separate by name parts, capitlize, and recombine
+  const prettyNames = nameParts.map(fullname => String(fullname)
+    .trim()
+    .split(' ')
+    // Capitalize the first letter
+    .map(name => name.slice(0, 1).toUpperCase() + name.slice(1))
 
+    // Recombine name parts
+    .join(' '));
   return _.compact(prettyNames);
 }
 
@@ -794,8 +795,9 @@ function convertPrepaidToRoles(prepaids) {
     const nextMemo = Object.assign({}, memo);
     nextMemo.early.slots += value.early;
     nextMemo.late.slots += value.late;
-    nextMemo.early.names =
-      nextMemo.early.names.concat(_.times(value.early, _.constant(value.name)));
+    nextMemo.early.names = nextMemo.early.names.concat(
+      _.times(value.early, _.constant(value.name)),
+    );
     nextMemo.late.names = nextMemo.late.names.concat(_.times(value.late, _.constant(value.name)));
 
     return nextMemo;
@@ -913,8 +915,8 @@ function writeGateCheckCrewGuestSheet(prepaidTransactions, names) {
         const newAccum = { ...accum };
         newAccum[role] = (newAccum[role] || 0) + 1;
         return newAccum;
-      }
-      , {},
+      },
+      {},
     );
 
     const authorizedPass = wristbandsCount[getPassLabel('authorized')]
@@ -1097,31 +1099,31 @@ const templates = {
   ealdConfirm: '<b>{{ reporter }}</b> made EA/LD changes to <b>{{ committee }}</b>.',
   onRecord: 'What is on record:',
   recordHeader:
-    '<thead style="border-bottom: 3px solid black;"><tr>' +
-      '<td style="font-weight: bold; border-bottom: 1px solid black; padding: 5px 10px;">Role</td>' +
-      '<td style="font-weight: bold; border-bottom: 1px solid black; padding: 5px 10px;">Type</td>' +
-      '<td style="font-weight: bold; border-bottom: 1px solid black; padding: 5px 10px;">Name</td>' +
-      '<td style="font-weight: bold; border-bottom: 1px solid black; padding: 5px 10px;">Passes</td>' +
-    '</tr></thead>',
+    '<thead style="border-bottom: 3px solid black;"><tr>'
+      + '<td style="font-weight: bold; border-bottom: 1px solid black; padding: 5px 10px;">Role</td>'
+      + '<td style="font-weight: bold; border-bottom: 1px solid black; padding: 5px 10px;">Type</td>'
+      + '<td style="font-weight: bold; border-bottom: 1px solid black; padding: 5px 10px;">Name</td>'
+      + '<td style="font-weight: bold; border-bottom: 1px solid black; padding: 5px 10px;">Passes</td>'
+    + '</tr></thead>',
   record:
-    '<tr>' +
-      '<td style="border-bottom: 1px solid black; padding: 5px 10px;">{{ committee }}</td>' +
-      '<td style="border-bottom: 1px solid black; padding: 5px 10px;">{{ type }}</td>' +
-      '<td style="border-bottom: 1px solid black; padding: 5px 10px;">{{ name }}</td>' +
-      '<td style="border-bottom: 1px solid black; padding: 5px 10px;">{{ passes }}</td>' +
-    '</tr>',
+    '<tr>'
+      + '<td style="border-bottom: 1px solid black; padding: 5px 10px;">{{ committee }}</td>'
+      + '<td style="border-bottom: 1px solid black; padding: 5px 10px;">{{ type }}</td>'
+      + '<td style="border-bottom: 1px solid black; padding: 5px 10px;">{{ name }}</td>'
+      + '<td style="border-bottom: 1px solid black; padding: 5px 10px;">{{ passes }}</td>'
+    + '</tr>',
   quotas: '{{ committee }} has {{ early }} early arrival and {{ late }} late departure passes.',
   questions:
-    'Mistake? <a href="https://docs.google.com/forms/d/1Wl1icD6-a3LNgvQaPWKYwHhqKWv9t8S1AFnvmJZ32-c/viewform">Resubmit the names</a>. ' +
-    'If you have any questions, please respond to this email.',
+    'Mistake? <a href="https://docs.google.com/forms/d/1Wl1icD6-a3LNgvQaPWKYwHhqKWv9t8S1AFnvmJZ32-c/viewform">Resubmit the names</a>. '
+    + 'If you have any questions, please respond to this email.',
   closing: 'See you on the dance floor,',
   links:
-  '<hr />More information: ' +
-        '<a href="https://docs.google.com/document/d/1z-_O8VQFaxyQZYgV3_C0mhxM8omxBhzqWqGwbBuDeL0/edit?usp=sharing">EA/LD Policy</a>, ' +
-        '<a href="https://docs.google.com/spreadsheets/d/1UMrXHPZbL82wlQlTNDuOtrRJ4sDwKZDiihT2egNJnFw/#gid=0">EA/LD by role</a>, ' +
-        '<a href="https://docs.google.com/spreadsheets/d/1UMrXHPZbL82wlQlTNDuOtrRJ4sDwKZDiihT2egNJnFw/#gid=1627289332">Authorized staff list</a>, ' +
-        '<a href="https://docs.google.com/spreadsheets/d/1UMrXHPZbL82wlQlTNDuOtrRJ4sDwKZDiihT2egNJnFw/#gid=523892843">Early arrival list</a>, ' +
-        '<a href="https://docs.google.com/spreadsheets/d/1UMrXHPZbL82wlQlTNDuOtrRJ4sDwKZDiihT2egNJnFw/#gid=148670578">Late departure list</a>',
+  '<hr />More information: '
+        + '<a href="https://docs.google.com/document/d/1z-_O8VQFaxyQZYgV3_C0mhxM8omxBhzqWqGwbBuDeL0/edit?usp=sharing">EA/LD Policy</a>, '
+        + '<a href="https://docs.google.com/spreadsheets/d/1UMrXHPZbL82wlQlTNDuOtrRJ4sDwKZDiihT2egNJnFw/#gid=0">EA/LD by role</a>, '
+        + '<a href="https://docs.google.com/spreadsheets/d/1UMrXHPZbL82wlQlTNDuOtrRJ4sDwKZDiihT2egNJnFw/#gid=1627289332">Authorized staff list</a>, '
+        + '<a href="https://docs.google.com/spreadsheets/d/1UMrXHPZbL82wlQlTNDuOtrRJ4sDwKZDiihT2egNJnFw/#gid=523892843">Early arrival list</a>, '
+        + '<a href="https://docs.google.com/spreadsheets/d/1UMrXHPZbL82wlQlTNDuOtrRJ4sDwKZDiihT2egNJnFw/#gid=148670578">Late departure list</a>',
   ldconfirm: '<b>{{ reporter }}</b> has put you, <b>{{ name }}</b>, in charge of picking up the <b>{{ numPasses }}x {{ role }}</b> late departure wristbands.',
   ldpickup: 'Late departure wristbands are picked up on Sunday at the Main Lodge from 12p to 4p.',
   ldpasses: 'You have {{ numPasses }} Late Departure passes waiting for you.',
@@ -1144,25 +1146,24 @@ function getQuotaHtmlBody(quota) {
     : '';
 
   const coordArticle = /[aeiou]/.test((name || '')[0].toLowerCase()) ? 'an' : 'a';
-  const body =
-    `You have <b>${earlySlots} EA-crew ${eaPasses} </b> and <b>${lateSlots} Late Departure ${ldPasses}</b>. ${
-      ldLiteCopy
-    }There is no need to purchase these passes. They are given to you as part of being ${coordArticle} ${name} Coordinator. ` +
-    '<p />' +
-    'Please send me the names I should be giving these passes to. ' +
-    'For LD passes, you can take all the LD passes as a coordinator and hand them out yourself. Highly recommended and a good power trip, because the volunteers who show up for their shift get a pass. In either case, let me know what you want to do. ' +
-    '<p />' +
-    'As a Coordinator, you do not automatically get an EA/LD pass. If you want to come Early Arrival or Late Departure, you need to use one of your comped passes. ' +
-    `If you need more comped passes, please contact your skipper, ${skipper}, and CC me. ` +
-    'For any other questions, respond back to this email.' +
-    '<p />' +
-    'Happy planning!' +
-    '<br />' +
-    'yarun' +
-    '<p />' +
+  const body = `You have <b>${earlySlots} EA-crew ${eaPasses} </b> and <b>${lateSlots} Late Departure ${ldPasses}</b>. ${
+    ldLiteCopy
+  }There is no need to purchase these passes. They are given to you as part of being ${coordArticle} ${name} Coordinator. `
+    + '<p />'
+    + 'Please send me the names I should be giving these passes to. '
+    + 'For LD passes, you can take all the LD passes as a coordinator and hand them out yourself. Highly recommended and a good power trip, because the volunteers who show up for their shift get a pass. In either case, let me know what you want to do. '
+    + '<p />'
+    + 'As a Coordinator, you do not automatically get an EA/LD pass. If you want to come Early Arrival or Late Departure, you need to use one of your comped passes. '
+    + `If you need more comped passes, please contact your skipper, ${skipper}, and CC me. `
+    + 'For any other questions, respond back to this email.'
+    + '<p />'
+    + 'Happy planning!'
+    + '<br />'
+    + 'yarun'
+    + '<p />'
     // `${templates.links}` +
     // '<p />' +
-    '<i>This email was autogenerated, but a human will respond.</i>';
+    + '<i>This email was autogenerated, but a human will respond.</i>';
 
   return preamble + body;
 }
@@ -1267,8 +1268,7 @@ function getPrepaidHtmlBody(prepaid) {
   const eaPasses = (parseInt(early, 10) || 0) === 1 ? 'pass' : 'passes';
   const ldPasses = (parseInt(late, 10) || 0) === 1 ? 'pass' : 'passes';
 
-  const body =
-    `I'm the Early Arrival / Late Depature (EA/LD) coordinator. I'm confirming you bought <b>${early} Early Arrival ${eaPasses} </b> and <b>${late} Late Departure ${ldPasses}</b>.
+  const body = `I'm the Early Arrival / Late Depature (EA/LD) coordinator. I'm confirming you bought <b>${early} Early Arrival ${eaPasses} </b> and <b>${late} Late Departure ${ldPasses}</b>.
     <p />
     ${early ? 'EA passes are picked up at the Gate. If you bought multiple passes for other people, have them mention your name at the Gate. ' : ''}
     ${late ? 'LD passes are picked up by the pool on Sunday between 12pm to 4pm.' : ''}
