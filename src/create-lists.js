@@ -277,7 +277,7 @@ export function getPrepaidTransactions(rawData) {
       late,
       email,
       status,
-      note
+      note,
     };
     return Object.assign({}, prepaids, { [tid]: recordObj });
   }, {});
@@ -602,7 +602,7 @@ function getPassLabel(passType) {
     late: 'Late',
     prepaid: 'Green',
     authorized: 'Purple',
-  }
+  };
 
   return passLabels[passType] || 'Unknown';
 }
@@ -872,8 +872,8 @@ function writeGateCheckSheet(prepaidTransactions, names) {
     const roles = record
       .slice(EALD_TYPE)
       .map(role => (
-        role === 'Prepaid' 
-          ? getPassLabel(role.toLowerCase()) 
+        role === 'Prepaid'
+          ? getPassLabel(role.toLowerCase())
           : getPassLabel('authorized')
       ));
     // Array.fill does not work in GAS and there is no babel polyfill for it
@@ -902,8 +902,8 @@ function writeGateCheckCrewGuestSheet(prepaidTransactions, names) {
     const roles = record
       .slice(COL_EALD_TYPE)
       .map(role => (
-        role === 'Prepaid' 
-          ? getPassLabel(role.toLowerCase()) 
+        role === 'Prepaid'
+          ? getPassLabel(role.toLowerCase())
           : getPassLabel('authorized')
       ));
     // Array.fill does not work in GAS and there is no babel polyfill for it
@@ -914,24 +914,25 @@ function writeGateCheckCrewGuestSheet(prepaidTransactions, names) {
         newAccum[role] = (newAccum[role] || 0) + 1;
         return newAccum;
       }
-    , {});
+      , {},
+    );
 
     const authorizedPass = wristbandsCount[getPassLabel('authorized')]
       ? getPassLabel('authorized')
       : '';
-    
+
     const guestPasses = _.times(
-      record[COL_EALD_NUM] - (authorizedPass ? 1 : 0), 
-      () => getPassLabel('prepaid')
+      record[COL_EALD_NUM] - (authorizedPass ? 1 : 0),
+      () => getPassLabel('prepaid'),
     );
 
     return [
-      record[COL_NAME], 
+      record[COL_NAME],
       'Ticket',
-      authorizedPass
+      authorizedPass,
     ].concat(guestPasses);
   });
-  
+
   const records = headerRecord.concat(dataRecords);
 
   records.forEach((record) => {
@@ -1133,7 +1134,7 @@ function getQuotaHtmlBody(quota) {
   const NEWLINE = '<p />';
   const preamble = templates.greeting + NEWLINE;
 
-  const nPasses = slots => (parseInt(slots, 10) || 0) === 1 ? 'pass' : 'passes';
+  const nPasses = slots => ((parseInt(slots, 10) || 0) === 1 ? 'pass' : 'passes');
   const eaPasses = nPasses(earlySlots);
   const ldPasses = nPasses(lateSlots);
   const ldLitePasses = nPasses(ldLiteSlots);
@@ -1144,14 +1145,14 @@ function getQuotaHtmlBody(quota) {
 
   const coordArticle = /[aeiou]/.test((name || '')[0].toLowerCase()) ? 'an' : 'a';
   const body =
-    `You have <b>${earlySlots} EA-crew ${eaPasses} </b> and <b>${lateSlots} Late Departure ${ldPasses}</b>. ` +
-    ldLiteCopy +
-    `There is no need to purchase these passes. They are given to you as part of being ${coordArticle} ${name} Coordinator. ` +
+    `You have <b>${earlySlots} EA-crew ${eaPasses} </b> and <b>${lateSlots} Late Departure ${ldPasses}</b>. ${
+      ldLiteCopy
+    }There is no need to purchase these passes. They are given to you as part of being ${coordArticle} ${name} Coordinator. ` +
     '<p />' +
     'Please send me the names I should be giving these passes to. ' +
     'For LD passes, you can take all the LD passes as a coordinator and hand them out yourself. Highly recommended and a good power trip, because the volunteers who show up for their shift get a pass. In either case, let me know what you want to do. ' +
     '<p />' +
-    'As a Coordinator, you do not automatically get an EA/LD pass. If you want to come Early Arrival or Late Departure, you need to use one of your comped passes. ' + 
+    'As a Coordinator, you do not automatically get an EA/LD pass. If you want to come Early Arrival or Late Departure, you need to use one of your comped passes. ' +
     `If you need more comped passes, please contact your skipper, ${skipper}, and CC me. ` +
     'For any other questions, respond back to this email.' +
     '<p />' +
@@ -1172,6 +1173,7 @@ function getQuotaEmailParams(quota) {
   const subject = `[EA/LD] Your comped EA/LD passes for ${name}`;
   const toEmails = _.compact(allEmails);
   const htmlBody = getQuotaHtmlBody(quota);
+  // eslint-disable-next-line no-unused-vars
   const uniqueToEmails = _.union([], toEmails).join(',');
 
   return {
@@ -1289,7 +1291,7 @@ function getPrepaidHtmlBody(prepaid) {
 *   early: number,
 *   late: number,
 *   email: string,
-*   status: string 
+*   status: string
 * }
 */
 function getPrepaidEmailParams(prepaid) {
@@ -1298,6 +1300,7 @@ function getPrepaidEmailParams(prepaid) {
   const subject = '[EA/LD] Your prepaid EA/LD passes';
   // const toEmails = _.compact(allEmails);
   const htmlBody = getPrepaidHtmlBody(prepaid);
+  // eslint-disable-next-line no-unused-vars
   const uniqueToEmails = _.union([], [email]).join(',');
 
   return {
@@ -1315,8 +1318,8 @@ export function sendPrepaidEmail() {
   const blacklist = [''];
   const safePrepaids = _.omit(prepaids, blacklist);
   const uncontactedPrepaids = _.filter(
-    safePrepaids, 
-    (safePrepaid) => safePrepaid.status != 'emailed',
+    safePrepaids,
+    safePrepaid => safePrepaid.status !== 'emailed',
   );
 
   _.forEach(uncontactedPrepaids, (prepaid) => {
