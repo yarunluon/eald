@@ -45,10 +45,10 @@
     "gulp-babel": "^7.0.1",
     "gulp-replace": "^1.0.0",
     "jest": "^23.1.0",
-    "rimraf": "^2.6.2",
-    "webpack": "^4.10.2"
+    "rimraf": "^2.6.3",
+    "webpack": "^4.30.0"
   },
   "dependencies": {
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.11"
   }
 }
