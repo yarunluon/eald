@@ -5,7 +5,7 @@ const babelSpreadOperator = require('babel-plugin-transform-object-rest-spread')
 const gulp = require('gulp');
 const replace = require('gulp-replace');
 
-gulp.task('default', () => {
+gulp.task('default', done => {
   gulp.src(['src/*.js', '!src/*.test.js', '!src/*-mocks.js'])
     // Exported functions confuse GAS. Convert to normal functions
     .pipe(replace('export ', ''))
@@ -44,6 +44,8 @@ gulp.task('default', () => {
 
   gulp.src('vendor/**')
     .pipe(gulp.dest('dist'));
+
+  done();
 });
 
 /*
