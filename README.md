@@ -4,6 +4,8 @@
 JavaScript that writes JavaScript to run in the Google App Scripts environment.
 
 The generated scripts manage the early arrival and late departure of guests in the form of Google Spreadsheets.
+## Usage (2019)
+There were security vulnerabilities that needed to be addressed. Updated Node version and packages.
 
 ## Usage
 1. `nvm install` to set the correct node version. Requires [nvm](https://github.com/creationix/nvm) to be installed.
