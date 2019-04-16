@@ -135,7 +135,7 @@ describe('Creators', () => {
       const [, formId] = formRecord;
       return formId === quotaId;
     });
-    const [id, name, earlySlots, lateSlots, ldLiteSlots, skipper] = roleRecord;
+    const [id, name, earlySlots, ldLiteSlots, lateSlots, skipper] = roleRecord;
     const [timestamp,,,,, reporter = '', reporterEmail = ''] = formRecord;
 
     const role = CreateLists.createRole(roleRecord, formRecord);
