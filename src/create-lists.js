@@ -9,10 +9,6 @@ export function getPublicSpreadsheetId() {
   return 'process.env.PUBLIC_SPREADSHEET_ID';
 }
 
-export function getSkipperSpreadsheetId() {
-  return 'process.env.SKIPPER_SPREADSHEET_ID';
-}
-
 export function getRawDataSpreadsheetId() {
   return 'process.env.RAW_DATA_SPREADSHEET_ID';
 }
@@ -141,11 +137,6 @@ function getBulkStaffTransactionSheet() {
 
 export function getPublicRolesQuotaSheet() {
   return getSheet(process.env.PUBLIC_ROLES_QUOTA_SHEET_ID, getPublicSpreadsheetId());
-}
-
-// Deprecated?
-export function getSkipperSummaryRole() {
-  return getSheet(process.env.SKIPPER_SHEET_ID, getSkipperSpreadsheetId());
 }
 
 /* ********************************

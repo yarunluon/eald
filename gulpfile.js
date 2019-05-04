@@ -16,24 +16,24 @@ gulp.task('default', done => {
     .pipe(replace('process.env.GATE_SPREADSHEET_ID', process.env.GATE_SPREADSHEET_ID))
     .pipe(replace('process.env.PUBLIC_SPREADSHEET_ID', process.env.PUBLIC_SPREADSHEET_ID))
     .pipe(replace('process.env.RAW_DATA_SPREADSHEET_ID', process.env.RAW_DATA_SPREADSHEET_ID))
-    .pipe(replace('process.env.SKIPPER_SPREADSHEET_ID', process.env.SKIPPER_SPREADSHEET_ID))
 
     // Sheet ids
-    .pipe(replace('process.env.RAW_FORM_RESPONSE_SHEET_ID', process.env.RAW_FORM_RESPONSE_SHEET_ID))
-    .pipe(replace('process.env.RAW_PREPAID_TRANSACTIONS_SHEET_ID', process.env.RAW_PREPAID_TRANSACTIONS_SHEET_ID))
-    .pipe(replace('process.env.PUBLIC_ROLES_QUOTA_SHEET_ID', process.env.PUBLIC_ROLES_QUOTA_SHEET_ID))
-    .pipe(replace('process.env.RAW_ROLES_QUOTA', process.env.RAW_ROLES_QUOTA))
-    .pipe(replace('process.env.ADMIN_PARSED_FORM_RESPONSES_SHEET_ID', process.env.ADMIN_PARSED_FORM_RESPONSES_SHEET_ID))
     .pipe(replace('process.env.ADMIN_ALL_PASSES_SHEET_ID', process.env.ADMIN_ALL_PASSES_SHEET_ID))
-    .pipe(replace('process.env.ADMIN_STAFF_LIST_SHEET_ID', process.env.ADMIN_STAFF_LIST_SHEET_ID))
-    .pipe(replace('process.env.ADMIN_PREPAID_SHEET_ID', process.env.ADMIN_PREPAID_SHEET_ID))
-    .pipe(replace('process.env.GATE_GATECHECK_SHEET_ID', process.env.GATE_GATECHECK_SHEET_ID))
     .pipe(replace('process.env.ADMIN_LATE_DEPARTURES_SHEET_ID', process.env.ADMIN_LATE_DEPARTURES_SHEET_ID))
+    .pipe(replace('process.env.ADMIN_PARSED_FORM_RESPONSES_SHEET_ID', process.env.ADMIN_PARSED_FORM_RESPONSES_SHEET_ID))
+    .pipe(replace('process.env.ADMIN_PREPAID_SHEET_ID', process.env.ADMIN_PREPAID_SHEET_ID))
+    .pipe(replace('process.env.ADMIN_STAFF_LIST_SHEET_ID', process.env.ADMIN_STAFF_LIST_SHEET_ID))
+    .pipe(replace('process.env.GATE_GATECHECK_SHEET_ID', process.env.GATE_GATECHECK_SHEET_ID))
+    .pipe(replace('process.env.PUBLIC_AUTHORIZED_STAFF_SHEET_ID', process.env.PUBLIC_AUTHORIZED_STAFF_SHEET_ID))
     .pipe(replace('process.env.PUBLIC_EARLY_ARRIVALS_SHEET_ID', process.env.PUBLIC_EARLY_ARRIVALS_SHEET_ID))
     .pipe(replace('process.env.PUBLIC_LATE_DEPARTURES_SHEET_ID', process.env.PUBLIC_LATE_DEPARTURES_SHEET_ID))
-    .pipe(replace('process.env.PUBLIC_AUTHORIZED_STAFF_SHEET_ID', process.env.PUBLIC_AUTHORIZED_STAFF_SHEET_ID))
+    .pipe(replace('process.env.PUBLIC_ROLES_QUOTA_SHEET_ID', process.env.PUBLIC_ROLES_QUOTA_SHEET_ID))
+    .pipe(replace('process.env.RAW_FORM_RESPONSE_SHEET_ID', process.env.RAW_FORM_RESPONSE_SHEET_ID))
+    .pipe(replace('process.env.RAW_PREPAID_TRANSACTIONS_SHEET_ID', process.env.RAW_PREPAID_TRANSACTIONS_SHEET_ID))
+    .pipe(replace('process.env.RAW_ROLES_QUOTA', process.env.RAW_ROLES_QUOTA))
+
+    // Deprecated?
     .pipe(replace('process.env.BULK_STAFF_TRANSACTION_SHEET_ID', process.env.BULK_STAFF_TRANSACTION_SHEET_ID))
-    .pipe(replace('process.env.SKIPPER_SHEET_ID', process.env.SKIPPER_SHEET_ID))
 
     // Transpile
     .pipe(babel({

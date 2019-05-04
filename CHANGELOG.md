@@ -7,3 +7,4 @@
 1. Renamed `.env.example` to `example.env` to take advantage of syntax highlighting
 1. Updated `.nvmrc` to use always use latest LTS node
 1. Updated npm dependencies
+1. Removed Skipper sheet id and spreadsheet id because its no longer used

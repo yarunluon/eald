@@ -21,10 +21,6 @@ describe('Spreadsheet management', () => {
     expect(typeof CreateLists.getPublicSpreadsheetId()).toEqual('string');
   });
 
-  it('gets a skipper sheet id', () => {
-    expect(typeof CreateLists.getSkipperSpreadsheetId()).toEqual('string');
-  });
-
   // Disable test because need to figure out how to substitute variables for testing
   xit('gets a Form Response Sheet id', () => {
     expect(typeof CreateLists.getFormResponseSheetId()).toEqual('number');
