@@ -17,15 +17,15 @@ export function getGateCheckSpreadsheetId() {
   return 'process.env.GATE_SPREADSHEET_ID';
 }
 
-export function getFormResponseSheetId() {
+export function getRawFormResponseSheetId() {
   return process.env.RAW_FORM_RESPONSE_SHEET_ID;
 }
 
-export function getPrepaidRawDataSheetId() {
+export function getRawPrepaidTransactionsSheetId() {
   return process.env.RAW_PREPAID_TRANSACTIONS_SHEET_ID;
 }
 
-export function getAdminRolesQuotaRawDataSheetId() {
+export function getRawRolesQuota() {
   return process.env.RAW_ROLES_QUOTA;
 }
 
@@ -57,7 +57,7 @@ function getFormResponsesRawData() {
   const DATA_START_ROW = 2;
   const DATA_START_COL = 1;
 
-  const sheet = getSheet(getFormResponseSheetId(), getRawDataSpreadsheetId());
+  const sheet = getSheet(getRawFormResponseSheetId(), getRawDataSpreadsheetId());
   const range = sheet.getDataRange();
   const numRows = range.getNumRows();
   const numCols = range.getNumColumns();
@@ -72,7 +72,7 @@ function getPrepaidRawData() {
   const DATA_START_ROW = 1;
   const DATA_START_COL = 1;
 
-  const sheet = getSheet(getPrepaidRawDataSheetId(), getRawDataSpreadsheetId());
+  const sheet = getSheet(getRawPrepaidTransactionsSheetId(), getRawDataSpreadsheetId());
   const range = sheet.getDataRange();
   const numRows = range.getNumRows();
   const numCols = range.getNumColumns();
@@ -88,46 +88,46 @@ function getRolesQuotaRawData() {
   const DATA_START_ROW = 3;
   const DATA_START_COL = 1;
 
-  const sheet = getSheet(getAdminRolesQuotaRawDataSheetId(), getRawDataSpreadsheetId());
+  const sheet = getSheet(getRawRolesQuota(), getRawDataSpreadsheetId());
   const range = sheet.getDataRange();
   const numRows = range.getNumRows();
   const numCols = range.getNumColumns();
   return sheet.getSheetValues(DATA_START_ROW, DATA_START_COL, numRows, numCols);
 }
 
-function getParsedFormResponsesSheet() {
+function getAdminParsedFormResponsesSheet() {
   return getSheet(process.env.ADMIN_PARSED_FORM_RESPONSES_SHEET_ID, getAdminSpreadsheetId());
 }
 
-function getRolesSheet() {
+function getAdminAllPassesSheet() {
   return getSheet(process.env.ADMIN_ALL_PASSES_SHEET_ID, getAdminSpreadsheetId());
 }
 
-function getNamesSheet() {
+function getAdminStaffListSheet() {
   return getSheet(process.env.ADMIN_STAFF_LIST_SHEET_ID, getAdminSpreadsheetId());
 }
 
-function getPrepaidSheet() {
+function getAdminPrepaidSheet() {
   return getSheet(process.env.ADMIN_PREPAID_SHEET_ID, getAdminSpreadsheetId());
 }
 
-function getGateCheckSheet() {
+function getGateGatecheckSheet() {
   return getSheet(process.env.GATE_GATECHECK_SHEET_ID, getGateCheckSpreadsheetId());
 }
 
-function getLateDepartureSheet() {
+function getAdminLateDepartureSheet() {
   return getSheet(process.env.ADMIN_LATE_DEPARTURES_SHEET_ID, getAdminSpreadsheetId());
 }
 
-function getPublicEarlyArrivalSheet() {
+function getPublicEarlyArrivalsSheet() {
   return getSheet(process.env.PUBLIC_EARLY_ARRIVALS_SHEET_ID, getPublicSpreadsheetId());
 }
 
-function getPublicLateDepartureSheet() {
+function getPublicLateDeparturesSheet() {
   return getSheet(process.env.PUBLIC_LATE_DEPARTURES_SHEET_ID, getPublicSpreadsheetId());
 }
 
-function getAuthorizedStaffSheet() {
+function getPublicAuthorizedStaffSheet() {
   return getSheet(process.env.PUBLIC_AUTHORIZED_STAFF_SHEET_ID, getPublicSpreadsheetId());
 }
 
@@ -825,7 +825,7 @@ function convertToRolesRecords(roles) {
 ******************************** */
 
 function writeParsedFormResponsesSheet(responses, roleQuotas) {
-  const sheet = getParsedFormResponsesSheet().clearContents();
+  const sheet = getAdminParsedFormResponsesSheet().clearContents();
   const parsedFormRecords = convertToParsedFormResponses(responses, roleQuotas);
   const headerRecord = [
     ['Role', 'Early names', 'Late names', '', 'Last updated:', Date()],
@@ -856,7 +856,7 @@ function writeGateCheckSheet(prepaidTransactions, names) {
   const NAME = 0;
   const EALD_NUM = 1;
   const EALD_TYPE = 2;
-  const sheet = getGateCheckSheet().clearContents();
+  const sheet = getGateGatecheckSheet().clearContents();
   const earlyArrivalRecords = convertToEaldRecords(prepaidTransactions, names, 'early');
   const headerRecord = [
     ['Name', 'Num', 'Type', '', 'Last updated:', Date()],
@@ -885,7 +885,7 @@ function writeGateCheckCrewGuestSheet(prepaidTransactions, names) {
   const COL_NAME = 0;
   const COL_EALD_NUM = 1;
   const COL_EALD_TYPE = 2;
-  const sheet = getGateCheckSheet().clearContents();
+  const sheet = getGateGatecheckSheet().clearContents();
   const earlyArrivalRecords = convertToEaldRecords(prepaidTransactions, names, 'early');
   const headerRecord = [
     ['Name', 'FnF', 'EA-Crew', 'EA-Guest =>', '', 'Last updated:', Date()],
@@ -934,7 +934,7 @@ function writeGateCheckCrewGuestSheet(prepaidTransactions, names) {
 }
 
 function writeLateDeparturePickupSheet(prepaidTransactions, names) {
-  const sheet = getLateDepartureSheet().clearContents();
+  const sheet = getAdminLateDepartureSheet().clearContents();
   const lateDepartureRecords = convertToLateDepartureRecords(prepaidTransactions, names);
   const headerRecord = [
     ['', 'Name', 'LD-Lite', 'LD', 'Roles ⇒', '', 'Last updated:', Date()],
@@ -948,7 +948,7 @@ function writeLateDeparturePickupSheet(prepaidTransactions, names) {
 
 
 function writePrepaidSheet(prepaids) {
-  const sheet = getPrepaidSheet().clearContents();
+  const sheet = getAdminPrepaidSheet().clearContents();
   const headerRecord = [
     ['Name', 'Early', 'Late', 'Email', '', 'Last updated:', Date()],
   ];
@@ -960,7 +960,7 @@ function writePrepaidSheet(prepaids) {
 }
 
 function writeAuthorizedStaffSheet(committees) {
-  const sheet = getAuthorizedStaffSheet().clearContents();
+  const sheet = getPublicAuthorizedStaffSheet().clearContents();
   const dataRecords = convertToRolesRecords(committees);
 
   const headerRecord = [
@@ -977,7 +977,7 @@ function writeAuthorizedStaffSheet(committees) {
 }
 
 function writeRolesSheet(prepaids, roles) {
-  const sheet = getRolesSheet().clearContents();
+  const sheet = getAdminAllPassesSheet().clearContents();
   const prepaidRoles = convertPrepaidToRoles(prepaids);
   const rolesRecords = convertToRolesRecords(roles);
   const prepaidRecords = convertToRolesRecords(prepaidRoles);
@@ -996,7 +996,7 @@ function writeRolesSheet(prepaids, roles) {
 }
 
 function writeEarlyArrivalSheet(prepaidTransactions, names) {
-  const sheet = getPublicEarlyArrivalSheet().clearContents();
+  const sheet = getPublicEarlyArrivalsSheet().clearContents();
   const earlyArrivalRecords = convertToEaldRecords(prepaidTransactions, names, 'early');
   const publicHeaderRecords = [
     ['Early arrival', '', 'Last updated:', Date()],
@@ -1011,7 +1011,7 @@ function writeEarlyArrivalSheet(prepaidTransactions, names) {
 }
 
 function writeLateDepartureSheet(prepaidTransactions, names) {
-  const sheet = getPublicLateDepartureSheet().clearContents();
+  const sheet = getPublicLateDeparturesSheet().clearContents();
   const lateDepartureRecords = convertToEaldRecords(prepaidTransactions, names, 'late');
   const headerRecords = [
     ['Late departure', '', 'Last updated:', Date()],
@@ -1027,7 +1027,7 @@ function writeLateDepartureSheet(prepaidTransactions, names) {
 
 
 function writeStaffSheet(names) {
-  const sheet = getNamesSheet().clearContents();
+  const sheet = getAdminStaffListSheet().clearContents();
   const dataRecords = convertToNamesRecords(names);
   const headerRecord = [
     ['Name', 'Type', 'Num', 'Roles ⇒', '', 'Last updated:', Date()],
