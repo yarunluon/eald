@@ -542,7 +542,7 @@ function getFnFNames() {
 }
 
 /**
-* Create a special Names object fof fnf names
+* Create a special Names object of fnf names
 * @returns {Object} Names object with fnf names
 * */
 function getFnFNameObj() {
