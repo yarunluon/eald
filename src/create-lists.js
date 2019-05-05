@@ -131,9 +131,9 @@ function getPublicAuthorizedStaffSheet() {
   return getSheet(process.env.PUBLIC_AUTHORIZED_STAFF_SHEET_ID, getPublicSpreadsheetId());
 }
 
-function getBulkStaffTransactionSheet() {
-  return getSheet(process.env.BULK_STAFF_TRANSACTION_SHEET_ID, getAdminSpreadsheetId());
-}
+// function getBulkStaffTransactionSheet() {
+//   return getSheet(process.env.BULK_STAFF_TRANSACTION_SHEET_ID, getAdminSpreadsheetId());
+// }
 
 export function getPublicRolesQuotaSheet() {
   return getSheet(process.env.PUBLIC_ROLES_QUOTA_SHEET_ID, getPublicSpreadsheetId());
@@ -473,33 +473,33 @@ function createRoles(formResponses, roleQuotas) {
 * @param {Boolean} test - True if the record should be written to the sheet. False otherwise.
 * @returns {Object[]} An array of bulk staff transaction objects
 */
-export function createBulkStaffTransactions(payloads, test) {
-  const properties = PropertiesService.getScriptProperties();
-  const sheet = getBulkStaffTransactionSheet();
-  const date = new Date().getTime();
+// export function createBulkStaffTransactions(payloads, test) {
+//   const properties = PropertiesService.getScriptProperties();
+//   const sheet = getBulkStaffTransactionSheet();
+//   const date = new Date().getTime();
 
-  const records = _.map(payloads, (payload) => {
-    const record = [
-      date,
-      payload.tid,
-      payload.method,
-      payload.role,
-      payload.type,
-    ].concat(payload.names);
+//   const records = _.map(payloads, (payload) => {
+//     const record = [
+//       date,
+//       payload.tid,
+//       payload.method,
+//       payload.role,
+//       payload.type,
+//     ].concat(payload.names);
 
-    return record;
-  });
+//     return record;
+//   });
 
-  if (!test) {
-    Logger.log(records);
-    records.forEach((record) => {
-      sheet.appendRow(record);
-    });
-    properties.setProperty('LAST_BULK_STAFF_TRANSACTION_CHANGE', new Date().getTime());
-  }
+//   if (!test) {
+//     Logger.log(records);
+//     records.forEach((record) => {
+//       sheet.appendRow(record);
+//     });
+//     properties.setProperty('LAST_BULK_STAFF_TRANSACTION_CHANGE', new Date().getTime());
+//   }
 
-  return payloads;
-}
+//   return payloads;
+// }
 
 /**
 * Takes a transaction object and adds it to the spreadsheet
