@@ -1187,27 +1187,27 @@ function getQuotaEmailParams(quota) {
 export function sendQuotaEmail() {
   const roleQuotas = getRoleQuotas(getRawRolesQuotaData());
 
-  const blacklist = [
-    // Default blacklist
+  const blocklist = [
+    // Default blocklist
     'fnf',
     '',
 
     // Already requested
-    'carcamping',
-    'cleanup',
-    'mist',
-    'shuttles',
+
+    // No need to email
     'skippers',
     'artgrantartists',
   ];
 
-  const whitelist = [
+  const safelist = [
     'altars',
     'artandartfunding',
     'availablehands',
     'cabinsandlodging',
     'cafebruxia',
+    'carcamping',
     'chilllounge',
+    'cleanup',
     'communications',
     'dancefloorchilloutplatform',
     'djbooth',
@@ -1225,6 +1225,7 @@ export function sendQuotaEmail() {
     'mainsound',
     'medical',
     'mildew',
+    'mist',
     'mold',
     'morninglibations',
     'musiccommittee',
@@ -1235,13 +1236,14 @@ export function sendQuotaEmail() {
     'recording',
     'schpank',
     'shade',
+    'shuttles',
     'signs',
     'sitecoordinators',
     'transportation',
   ];
 
-  const pickedRoleQuotas = _.pick(roleQuotas, whitelist);
-  _.forEach(_.omit(pickedRoleQuotas, blacklist), (quota) => {
+  const pickedRoleQuotas = _.pick(roleQuotas, safelist);
+  _.forEach(_.omit(pickedRoleQuotas, blocklist), (quota) => {
     const emailParams = getQuotaEmailParams(quota);
     Logger.log(emailParams);
     // Always leave this commented as a safety. Uncomment in production.
