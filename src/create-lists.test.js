@@ -190,13 +190,13 @@ describe('Creators', () => {
 
   describe('createRoles', () => {
     // Don't know if this is parsing correctly
-    xit('creates a roles object', () => {
+    it('creates a roles object', () => {
       const roles = CreateLists.createRoles(
         CreateLists.getFormResponses(formResponsesJson),
         CreateLists.getRoleQuotas(rolesQuotasJson),
       );
 
-      expect(true).toEqual(true);
+      expect(Object.keys(roles)).toEqual(expect.arrayContaining(['eald', 'fnf']));
     });
   });
 });
