@@ -76,7 +76,7 @@ describe('Helper functions', () => {
         'Ned Stark',
       ]).toEqual(names);
     });
-  })
+  });
 
   describe('createRoleRecords', () => {
     it('creates records for the roles', () => {
@@ -99,7 +99,7 @@ describe('Helper functions', () => {
       const { normalizeName } = CreateLists;
       expect(normalizeName('Jon Snow')).toEqual('jonsnow');
     });
-  })
+  });
 
   describe('bothName', () => {
     it('finds names in both lists', () => {
@@ -111,7 +111,7 @@ describe('Helper functions', () => {
         'jonsnow',
       ]).toEqual(bothNames);
     });
-  })
+  });
 });
 
 describe('Spreadsheet Getters', () => {
@@ -142,7 +142,7 @@ describe('Spreadsheet Getters', () => {
       expect(quotas.eald).toEqual(quotasJson[2]);
       expect(quotas).toHaveProperty('fnf');
     });
-  })
+  });
 });
 
 describe('Creators', () => {
@@ -187,5 +187,5 @@ describe('Creators', () => {
       expect(names.Nella.early.length).toBe(2);
       expect(names['Norbert Vance'].late.length).toBe(2);
     });
-  })
+  });
 });
