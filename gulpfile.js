@@ -1,7 +1,8 @@
 require('dotenv').config();
 const babel = require('gulp-babel');
-const babelObjectAssign = require('babel-plugin-transform-object-assign');
-const babelSpreadOperator = require('babel-plugin-transform-object-rest-spread');
+const babelPluginObjectAssign = require('@babel/plugin-transform-object-assign');
+const babelPluginSpreadOperator = require('@babel/plugin-proposal-object-rest-spread');
+const BABEL_PRESET_ENV = '@babel/preset-env';
 const gulp = require('gulp');
 const replace = require('gulp-replace');
 
@@ -37,8 +38,8 @@ gulp.task('default', done => {
 
     // Transpile
     .pipe(babel({
-      plugins: [babelObjectAssign, babelSpreadOperator],
-      presets: ['env'],
+      plugins: [babelPluginObjectAssign, babelPluginSpreadOperator],
+      presets: [BABEL_PRESET_ENV],
     }))
     .pipe(gulp.dest('dist'));
 
