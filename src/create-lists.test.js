@@ -39,14 +39,6 @@ describe('Spreadsheet management', () => {
 });
 
 describe('Helper functions', () => {
-  describe('sortNames', () => {
-    it('sorts two strings', () => {
-      expect(CreateLists.sortNames('a', 'b')).toBe(-1);
-      expect(CreateLists.sortNames('a', 'a')).toBe(0);
-      expect(CreateLists.sortNames('b', 'a')).toBe(1);
-    });
-  });
-
   describe('addRole', () => {
     it('combines roles', () => {
       const roles = {
@@ -65,16 +57,15 @@ describe('Helper functions', () => {
     });
   });
 
-  describe('splitNames', () => {
-    it('parses names into an array', () => {
-      const nameString = 'Sansa Stark,John Snow,   Tyrion lannister  , ned Stark, ,  ';
-      const names = CreateLists.splitNames(nameString);
+  describe('bothName', () => {
+    it('finds names in both lists', () => {
+      const prepaidNames = ['Jon Snow', 'The mountain'];
+      const roleNames = ['jon Snow', 'The Hound'];
+
+      const bothNames = CreateLists.bothNames(prepaidNames, roleNames);
       expect([
-        'Sansa Stark',
-        'John Snow',
-        'Tyrion Lannister',
-        'Ned Stark',
-      ]).toEqual(names);
+        'jonsnow',
+      ]).toEqual(bothNames);
     });
   });
 
@@ -101,15 +92,24 @@ describe('Helper functions', () => {
     });
   });
 
-  describe('bothName', () => {
-    it('finds names in both lists', () => {
-      const prepaidNames = ['Jon Snow', 'The mountain'];
-      const roleNames = ['jon Snow', 'The Hound'];
+  describe('sortNames', () => {
+    it('sorts two strings', () => {
+      expect(CreateLists.sortNames('a', 'b')).toBe(-1);
+      expect(CreateLists.sortNames('a', 'a')).toBe(0);
+      expect(CreateLists.sortNames('b', 'a')).toBe(1);
+    });
+  });
 
-      const bothNames = CreateLists.bothNames(prepaidNames, roleNames);
+  describe('splitNames', () => {
+    it('parses names into an array', () => {
+      const nameString = 'Sansa Stark,John Snow,   Tyrion lannister  , ned Stark, ,  ';
+      const names = CreateLists.splitNames(nameString);
       expect([
-        'jonsnow',
-      ]).toEqual(bothNames);
+        'Sansa Stark',
+        'John Snow',
+        'Tyrion Lannister',
+        'Ned Stark',
+      ]).toEqual(names);
     });
   });
 });
@@ -185,6 +185,18 @@ describe('Creators', () => {
 
       expect(names.Nella.early.length).toBe(2);
       expect(names['Norbert Vance'].late.length).toBe(2);
+    });
+  });
+
+  describe('createRoles', () => {
+    // Don't know if this is parsing correctly
+    xit('creates a roles object', () => {
+      const roles = CreateLists.createRoles(
+        CreateLists.getFormResponses(formResponsesJson),
+        CreateLists.getRoleQuotas(rolesQuotasJson),
+      );
+
+      expect(true).toEqual(true);
     });
   });
 });

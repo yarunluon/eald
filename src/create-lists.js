@@ -159,6 +159,48 @@ export function addRole(roles, role) {
 }
 
 /**
+* Returns a list of names that have both prepaid and are volunteering
+* @param {String[]} prepaidNames - An array of names that have prepaid
+* @param {String[]} roleNames - An array of names that have volunteered
+* @returns {String[]} - An array of normalized names that are both prepaid and are volunteering
+* */
+export function bothNames(prepaidNames, roleNames) {
+  const normalizedRoleNames = roleNames.map(normalizeName);
+  const normalizedPrepaidNames = prepaidNames.map(normalizeName);
+
+  const names = _.intersection(normalizedPrepaidNames, normalizedRoleNames);
+  return names;
+}
+
+/**
+* Create an array of records for a specific role
+* @param {String} role - Name of role
+* @param {Number} slots - How many records
+* @param {String[]} names - Names of people to fill each role
+* @param {String} type - Type of role. Early or Late
+* @returns {Array[]} Record array with the following items
+*    ```[ role name, role type, name of person]```
+* */
+export function createRoleRecords(role, slots, names, type) {
+  const records = _.times(slots, (number) => {
+    const name = names.length > number ? names[number] : '';
+    const record = [role, type, name];
+    return record;
+  });
+
+  return records;
+}
+
+/**
+* Removes spaces and lowercases names to remove opinions about how to write a name
+* @param {String} - name of person
+* @return {String} - Name of person in all lowercase with spaces removed
+* */
+export function normalizeName(name) {
+  return name.toLowerCase().replace(' ', '');
+}
+
+/**
 * Sorts records on the first element: name
 * @param {Array} a - Array of items
 * @param {Array} b - Another array of items
@@ -195,48 +237,6 @@ export function splitNames(names) {
     // Recombine name parts
     .join(' '));
   return _.compact(prettyNames);
-}
-
-/**
-* Create an array of records for a specific role
-* @param {String} role - Name of role
-* @param {Number} slots - How many records
-* @param {String[]} names - Names of people to fill each role
-* @param {String} type - Type of role. Early or Late
-* @returns {Array[]} Record array with the following items
-*    ```[ role name, role type, name of person]```
-* */
-export function createRoleRecords(role, slots, names, type) {
-  const records = _.times(slots, (number) => {
-    const name = names.length > number ? names[number] : '';
-    const record = [role, type, name];
-    return record;
-  });
-
-  return records;
-}
-
-/**
-* Removes spaces and lowercases names to remove opinions about how to write a name
-* @param {String} - name of person
-* @return {String} - Name of person in all lowercase with spaces removed
-* */
-export function normalizeName(name) {
-  return name.toLowerCase().replace(' ', '');
-}
-
-/**
-* Returns a list of names that have both prepaid and are volunteering
-* @param {String[]} prepaidNames - An array of names that have prepaid
-* @param {String[]} roleNames - An array of names that have volunteered
-* @returns {String[]} - An array of normalized names that are both prepaid and are volunteering
-* */
-export function bothNames(prepaidNames, roleNames) {
-  const normalizedRoleNames = roleNames.map(normalizeName);
-  const normalizedPrepaidNames = prepaidNames.map(normalizeName);
-
-  const names = _.intersection(normalizedPrepaidNames, normalizedRoleNames);
-  return names;
 }
 
 /* ********************************
