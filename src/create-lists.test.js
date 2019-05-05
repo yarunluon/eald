@@ -3,9 +3,9 @@ import _ from 'lodash';
 import * as CreateLists from './create-lists';
 import * as GasMocks from './gas-mocks';
 
-import formJson from './fixtures/form-responses.json';
-import prepaidJson from './fixtures/prepaid-transactions.json';
-import quotasJson from './fixtures/wristband-quotas.json';
+import formResponsesJson from './fixtures/form-responses.json';
+import prepaidTransactionsJson from './fixtures/prepaid-transactions.json';
+import rolesQuotasJson from './fixtures/roles-quotas.json';
 import { ROLES } from './fixtures/roles';
 
 beforeAll(() => {
@@ -117,7 +117,7 @@ describe('Helper functions', () => {
 describe('Spreadsheet Getters', () => {
   describe('getPrepaidTransactions', () => {
     it('gets the prepaid transactions', () => {
-      const prepaids = CreateLists.getPrepaidTransactions(prepaidJson);
+      const prepaids = CreateLists.getPrepaidTransactions(prepaidTransactionsJson);
 
       const prepaid = prepaids['Doran Mortell'];
       expect(prepaid).toHaveProperty('timestamp');
@@ -131,15 +131,15 @@ describe('Spreadsheet Getters', () => {
 
   describe('getFormResponses', () => {
     it('gets the form responses', () => {
-      const formResponses = CreateLists.getFormResponses(formJson);
-      expect(formResponses['EA/LD']).toEqual(formJson[1]);
+      const formResponses = CreateLists.getFormResponses(formResponsesJson);
+      expect(formResponses['EA/LD']).toEqual(formResponsesJson[1]);
     });
   });
 
   describe('getRoleQuotas', () => {
     it('gets the wristabnd quotas', () => {
-      const quotas = CreateLists.getRoleQuotas(quotasJson);
-      expect(quotas.eald).toEqual(quotasJson[2]);
+      const quotas = CreateLists.getRoleQuotas(rolesQuotasJson);
+      expect(quotas.eald).toEqual(rolesQuotasJson[2]);
       expect(quotas).toHaveProperty('fnf');
     });
   });
@@ -148,8 +148,8 @@ describe('Spreadsheet Getters', () => {
 describe('Creators', () => {
   describe('createRole', () => {
     it('creates a role object', () => {
-      const formRecord = _.last(formJson);
-      const roleRecord = _.find(quotasJson, (quota) => {
+      const formRecord = _.last(formResponsesJson);
+      const roleRecord = _.find(rolesQuotasJson, (quota) => {
         const [, quotaId] = quota;
         const [, formId] = formRecord;
         return formId === quotaId;
@@ -181,8 +181,7 @@ describe('Creators', () => {
 
   describe('createNames', () => {
     it('creates a name object', () => {
-      const roles = ROLES;
-      const names = CreateLists.createNames(roles);
+      const names = CreateLists.createNames(ROLES);
 
       expect(names.Nella.early.length).toBe(2);
       expect(names['Norbert Vance'].late.length).toBe(2);
