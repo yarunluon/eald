@@ -1,5 +1,6 @@
 import _ from 'lodash';
 // import * as CreateLists from '../dist-test/create-lists';
+// jest.mock('./create-lists');
 import * as CreateLists from './create-lists';
 import * as GasMocks from './gas-mocks';
 
@@ -31,10 +32,21 @@ describe('Spreadsheet management', () => {
   });
 
   // Disable test because need to figure out how to substitute variables for testing
-  xit('gets a sheet', () => {
-    const sheetId = GasMocks.SpreadsheetApp.openById('spreadsheetId').getSheets()[0].getSheetId();
-    const sheet = CreateLists.getSheet(sheetId, 'spreadsheetId');
-    expect(sheet.getSheetId()).toEqual(sheetId);
+  // it('gets a sheet', () => {
+  //   const sheetId = SpreadsheetApp.openById('spreadsheetId').getSheets()[0].getSheetId();
+  //   const sheet = CreateLists.getSheet(sheetId, 'spreadsheetId');
+  //   expect(sheet.getSheetId()).toEqual(sheetId);
+  // });
+
+  xit('gets raw form data', () => {
+    console.log(global.SpreadsheetApp);
+    CreateLists.mockImplementation(() => ({
+      getSheet: GasMocks.Sheet(formResponsesJson),
+    }));
+
+    const rawFormResponseData = CreateLists.getRawFormResponsesData();
+
+    console.log(rawFormResponseData);
   });
 });
 

@@ -53,7 +53,7 @@ export function getSheet(sheetId, spreadsheetId) {
 * Get the form responses from the Google Spreadsheet as pure javascript array
 * @returns {Array[]} Array of records.
 * */
-function getRawFormResponsesData() {
+export function getRawFormResponsesData() {
   const DATA_START_ROW = 2;
   const DATA_START_COL = 1;
 

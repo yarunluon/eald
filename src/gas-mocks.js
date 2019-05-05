@@ -6,7 +6,7 @@ export const SpreadsheetApp = {
   }),
 };
 
-export const Sheet = jest.fn(sheetJson => ({
+export const Sheet = jest.fn().mockImplementation(sheetJson => ({
   getDataRange: () => ({
     getNumRows: jest.fn().mockReturnValue(sheetJson.length),
     getNumColumns: jest.fn().mockReturnValue(sheetJson[0].length),
