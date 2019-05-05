@@ -507,27 +507,27 @@ export function createRoles(formResponses, roleQuotas) {
 * @param {Object} transaction - Prepaid transaction
 * @return {Object} A new transaction object with a date attribute
 */
-export function createPrepaidTransaction(transaction) {
-  const properties = PropertiesService.getScriptProperties();
-  const sheet = getRawPrepaidTransactionsData();
-  const date = new Date().getTime();
+// export function createPrepaidTransaction(transaction) {
+//   const properties = PropertiesService.getScriptProperties();
+//   const sheet = getRawPrepaidTransactionsData();
+//   const date = new Date().getTime();
 
-  const record = [
-    date,
-    transaction.tid,
-    transaction.name,
-    Number(transaction.early),
-    Number(transaction.late),
-    transaction.email,
-  ];
+//   const record = [
+//     date,
+//     transaction.tid,
+//     transaction.name,
+//     Number(transaction.early),
+//     Number(transaction.late),
+//     transaction.email,
+//   ];
 
-  if (!transaction.test) {
-    sheet.appendRow(record);
-    properties.setProperty('LAST_PREPAID_TRANSACTION_CHANGE', new Date().getTime());
-  }
+//   if (!transaction.test) {
+//     sheet.appendRow(record);
+//     properties.setProperty('LAST_PREPAID_TRANSACTION_CHANGE', new Date().getTime());
+//   }
 
-  return _.assign({}, transaction, { date });
-}
+//   return _.assign({}, transaction, { date });
+// }
 
 /* ********************************
 * FnF

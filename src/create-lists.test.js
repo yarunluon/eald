@@ -189,7 +189,6 @@ describe('Creators', () => {
   });
 
   describe('createRoles', () => {
-    // Don't know if this is parsing correctly
     it('creates a roles object', () => {
       const roles = CreateLists.createRoles(
         CreateLists.getFormResponses(formResponsesJson),
