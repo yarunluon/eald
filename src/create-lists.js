@@ -1195,13 +1195,9 @@ export function sendQuotaEmail() {
     // Already requested
 
     // No need to email
-    'skippers',
-    'artgrantartists',
-  ];
-
-  const safelist = [
     'altars',
     'artandartfunding',
+    'artgrantartists',
     'availablehands',
     'cabinsandlodging',
     'cafebruxia',
@@ -1210,7 +1206,8 @@ export function sendQuotaEmail() {
     'cleanup',
     'communications',
     'dancefloorchilloutplatform',
-    'djbooth',
+    'musiccommittee',
+    'skippers',
     'djsigns',
     'eald',
     'externalkitchen',
@@ -1230,6 +1227,10 @@ export function sendQuotaEmail() {
     'morninglibations',
     'musiccommittee',
     'parking',
+  ];
+
+  const safelist = [
+    'djbooth',
     'pooldecorations',
     'poolsidesound',
     'power',
@@ -1242,7 +1243,12 @@ export function sendQuotaEmail() {
     'transportation',
   ];
 
-  const pickedRoleQuotas = _.pick(roleQuotas, safelist);
+  const pickedRoleQuotas = _.pickBy(_.pick(roleQuotas, safelist), (roleQuota => {
+    const [, name, , , , , ...allEmails] = roleQuota;
+    return _.compact(allEmails).length > 0;
+  }));
+
+
   _.forEach(_.omit(pickedRoleQuotas, blocklist), (quota) => {
     const emailParams = getQuotaEmailParams(quota);
     Logger.log(emailParams);
