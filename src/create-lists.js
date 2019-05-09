@@ -342,7 +342,7 @@ export function getRoleQuotas(rawData) {
 * @returns {Object} Role object
 * */
 export function createRole(roleRecord, formRecord) {
-  const [timestamp,, rawEarlyNames, rawLateNames, rawLdLiteNames, reporter = '', reporterEmail = ''] = formRecord;
+  const [timestamp, , rawEarlyNames, rawLateNames, rawLdLiteNames, reporter = '', reporterEmail = ''] = formRecord;
   const [id, name, earlySlots, ldLiteSlots, lateSlots, skipper, ...allEmails] = roleRecord;
 
   const allEarlyNames = splitNames(rawEarlyNames) || [];
@@ -1091,17 +1091,17 @@ const templates = {
   onRecord: 'What is on record:',
   recordHeader:
     '<thead style="border-bottom: 3px solid black;"><tr>'
-      + '<td style="font-weight: bold; border-bottom: 1px solid black; padding: 5px 10px;">Role</td>'
-      + '<td style="font-weight: bold; border-bottom: 1px solid black; padding: 5px 10px;">Type</td>'
-      + '<td style="font-weight: bold; border-bottom: 1px solid black; padding: 5px 10px;">Name</td>'
-      + '<td style="font-weight: bold; border-bottom: 1px solid black; padding: 5px 10px;">Passes</td>'
+    + '<td style="font-weight: bold; border-bottom: 1px solid black; padding: 5px 10px;">Role</td>'
+    + '<td style="font-weight: bold; border-bottom: 1px solid black; padding: 5px 10px;">Type</td>'
+    + '<td style="font-weight: bold; border-bottom: 1px solid black; padding: 5px 10px;">Name</td>'
+    + '<td style="font-weight: bold; border-bottom: 1px solid black; padding: 5px 10px;">Passes</td>'
     + '</tr></thead>',
   record:
     '<tr>'
-      + '<td style="border-bottom: 1px solid black; padding: 5px 10px;">{{ committee }}</td>'
-      + '<td style="border-bottom: 1px solid black; padding: 5px 10px;">{{ type }}</td>'
-      + '<td style="border-bottom: 1px solid black; padding: 5px 10px;">{{ name }}</td>'
-      + '<td style="border-bottom: 1px solid black; padding: 5px 10px;">{{ passes }}</td>'
+    + '<td style="border-bottom: 1px solid black; padding: 5px 10px;">{{ committee }}</td>'
+    + '<td style="border-bottom: 1px solid black; padding: 5px 10px;">{{ type }}</td>'
+    + '<td style="border-bottom: 1px solid black; padding: 5px 10px;">{{ name }}</td>'
+    + '<td style="border-bottom: 1px solid black; padding: 5px 10px;">{{ passes }}</td>'
     + '</tr>',
   quotas: '{{ committee }} has {{ early }} early arrival and {{ late }} late departure passes.',
   questions:
@@ -1109,12 +1109,12 @@ const templates = {
     + 'If you have any questions, please respond to this email.',
   closing: 'See you on the dance floor,',
   links:
-  '<hr />More information: '
-        + '<a href="https://docs.google.com/document/d/1z-_O8VQFaxyQZYgV3_C0mhxM8omxBhzqWqGwbBuDeL0/edit?usp=sharing">EA/LD Policy</a>, '
-        + '<a href="https://docs.google.com/spreadsheets/d/1UMrXHPZbL82wlQlTNDuOtrRJ4sDwKZDiihT2egNJnFw/#gid=0">EA/LD by role</a>, '
-        + '<a href="https://docs.google.com/spreadsheets/d/1UMrXHPZbL82wlQlTNDuOtrRJ4sDwKZDiihT2egNJnFw/#gid=1627289332">Authorized staff list</a>, '
-        + '<a href="https://docs.google.com/spreadsheets/d/1UMrXHPZbL82wlQlTNDuOtrRJ4sDwKZDiihT2egNJnFw/#gid=523892843">Early arrival list</a>, '
-        + '<a href="https://docs.google.com/spreadsheets/d/1UMrXHPZbL82wlQlTNDuOtrRJ4sDwKZDiihT2egNJnFw/#gid=148670578">Late departure list</a>',
+    '<hr />More information: '
+    + '<a href="https://docs.google.com/document/d/1z-_O8VQFaxyQZYgV3_C0mhxM8omxBhzqWqGwbBuDeL0/edit?usp=sharing">EA/LD Policy</a>, '
+    + '<a href="https://docs.google.com/spreadsheets/d/1UMrXHPZbL82wlQlTNDuOtrRJ4sDwKZDiihT2egNJnFw/#gid=0">EA/LD by role</a>, '
+    + '<a href="https://docs.google.com/spreadsheets/d/1UMrXHPZbL82wlQlTNDuOtrRJ4sDwKZDiihT2egNJnFw/#gid=1627289332">Authorized staff list</a>, '
+    + '<a href="https://docs.google.com/spreadsheets/d/1UMrXHPZbL82wlQlTNDuOtrRJ4sDwKZDiihT2egNJnFw/#gid=523892843">Early arrival list</a>, '
+    + '<a href="https://docs.google.com/spreadsheets/d/1UMrXHPZbL82wlQlTNDuOtrRJ4sDwKZDiihT2egNJnFw/#gid=148670578">Late departure list</a>',
   ldconfirm: '<b>{{ reporter }}</b> has put you, <b>{{ name }}</b>, in charge of picking up the <b>{{ numPasses }}x {{ role }}</b> late departure wristbands.',
   ldpickup: 'Late departure wristbands are picked up on Sunday at the Main Lodge from 12p to 4p.',
   ldpasses: 'You have {{ numPasses }} Late Departure passes waiting for you.',
@@ -1137,9 +1137,8 @@ function getQuotaHtmlBody(quota) {
     : '';
 
   const coordArticle = /[aeiou]/.test((name || '')[0].toLowerCase()) ? 'an' : 'a';
-  const body = `You have <b>${earlySlots} EA-crew ${eaPasses} </b> and <b>${lateSlots} Late Departure ${ldPasses}</b>. ${
-    ldLiteCopy
-  }There is no need to purchase these passes. They are given to you as part of being ${coordArticle} ${name} Coordinator. `
+  const body = `You have <b>${earlySlots} EA-crew ${eaPasses} </b> and <b>${lateSlots} Late Departure ${ldPasses}</b>. ${ldLiteCopy}
+    There is no need to purchase these passes. They are given to you as part of being ${coordArticle} ${name} Coordinator. `
     + '<p />'
     + 'Please send me the names I should be giving these passes to. '
     + 'For LD passes, you can take all the LD passes as a coordinator and hand them out yourself. Highly recommended and a good power trip, because the volunteers who show up for their shift get a pass. In either case, let me know what you want to do. '
@@ -1243,8 +1242,8 @@ export function sendQuotaEmail() {
     'transportation',
   ];
 
-  const pickedRoleQuotas = _.pickBy(_.pick(roleQuotas, safelist), (roleQuota => {
-    const [, name, , , , , ...allEmails] = roleQuota;
+  const pickedRoleQuotas = _.pickBy(_.pick(roleQuotas, safelist), ((roleQuota) => {
+    const [, , , , , , ...allEmails] = roleQuota;
     return _.compact(allEmails).length > 0;
   }));
 

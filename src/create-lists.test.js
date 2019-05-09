@@ -39,14 +39,11 @@ describe('Spreadsheet management', () => {
   // });
 
   xit('gets raw form data', () => {
-    console.log(global.SpreadsheetApp);
     CreateLists.mockImplementation(() => ({
       getSheet: GasMocks.Sheet(formResponsesJson),
     }));
 
-    const rawFormResponseData = CreateLists.getRawFormResponsesData();
-
-    console.log(rawFormResponseData);
+    // const rawFormResponseData = CreateLists.getRawFormResponsesData();
   });
 });
 
@@ -167,7 +164,7 @@ describe('Creators', () => {
         return formId === quotaId;
       });
       const [id, name, earlySlots, ldLiteSlots, lateSlots, skipper] = roleRecord;
-      const [timestamp,,,,, reporter = '', reporterEmail = ''] = formRecord;
+      const [timestamp, , , , , reporter = '', reporterEmail = ''] = formRecord;
 
       const role = CreateLists.createRole(roleRecord, formRecord);
       expect(role).toHaveProperty('early');
